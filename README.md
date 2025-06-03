@@ -1,12 +1,12 @@
 # 🚀 chetas-be
 
-> ⚡ High-performance backend using [Bun](https://bun.sh), TypeScript, Express, and modern dev tools (Husky, ESLint, Prettier)
+> ⚡ High-performance backend using [npm](https://npm.sh), TypeScript, Express, and modern dev tools (Husky, ESLint, Prettier)
 
 ---
 
 ## 📦 Tech Stack
 
-- **Runtime:** Bun v1.2.8
+- **Runtime:** npm v1.2.8
 - **Language:** TypeScript
 - **Framework:** Express
 - **Formatting:** Prettier
@@ -22,9 +22,9 @@
 ### 1️⃣ Clone and Install
 
 ```bash
-git clone https://github.com/utkarshya24/chetas-be.git
-cd chetas-be
-bun install
+git clone https://github.com/utkarshya24/super-dev-be.git
+cd super-dev-be
+npm install
 
 ```
 
@@ -33,5 +33,5 @@ bun install
 ### 2️⃣ Run the Server (Dev)
 
 ```bash
-bun run dev
+npm run dev
 ```
