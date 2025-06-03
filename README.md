@@ -1,4 +1,4 @@
-# 🚀 chetas-be
+# 🚀 super-dev-be
 
 > ⚡ High-performance backend using [npm](https://npm.sh), TypeScript, Express, and modern dev tools (Husky, ESLint, Prettier)
 
