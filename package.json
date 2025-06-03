@@ -9,22 +9,22 @@
   "license": "MIT",
   "scripts": {
     "test": "npx tsx server.ts",
-    "start": "npm run ./dist/server.js",
-    "dev": "npm tsx server.ts",
-    "build": "npm tsc",
-    "lint": "npm eslint . --ext .ts,.tsx --fix",
-    "format": "npm prettier --write .",
-    "typecheck": "npm tsc --noEmit",
+    "start": "node ./dist/server.js",
+    "dev": "tsx server.ts",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
     "prepare": "husky install",
-    "postinstall": "bun run prepare"
+    "postinstall": "npm run prepare"
   },
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx}": [
-      "bunx eslint --fix",
-      "bunx prettier --write"
+      "eslint --fix",
+      "prettier --write"
     ],
     "**/*.{json,md,css}": [
-      "bunx prettier --write"
+      "prettier --write"
     ]
   },
   "devDependencies": {

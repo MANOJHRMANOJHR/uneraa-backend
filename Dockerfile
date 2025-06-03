@@ -8,16 +8,16 @@ WORKDIR /app
 COPY package.json ./
 
 # Install dependencies
-RUN bun install
+RUN npm install
 
 
 # Copy all source code
 COPY . .
 
-RUN bun run build
+RUN npm run build
 
 # Expose port 8000
 EXPOSE 8000
 
 # Start the server
-CMD ["bun", "start"]
+CMD ["npm", "start"]
