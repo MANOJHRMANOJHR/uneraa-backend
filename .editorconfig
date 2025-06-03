@@ -1,0 +1,26 @@
+# Root EditorConfig file — stops EditorConfig from searching parent directories
+root = true
+
+# Apply to all files
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# Apply to Markdown and JSON files
+[*.md]
+trim_trailing_whitespace = false
+
+[*.json]
+indent_size = 2
+
+# YAML files (for consistency in workflows, CI/CD, etc.)
+[*.yml]
+indent_size = 2
+
+# Makefile files must use tabs
+[Makefile]
+indent_style = tab

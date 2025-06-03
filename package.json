@@ -1,0 +1,64 @@
+{
+  "name": "super-dev-be",
+  "module": "server.ts",
+  "type": "module",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Super dev Backend",
+  "author": "utkarsh yadav",
+  "license": "MIT",
+  "scripts": {
+    "test": "npx tsx server.ts",
+    "start": "npm run ./dist/server.js",
+    "dev": "npm tsx server.ts",
+    "build": "npm tsc",
+    "lint": "npm eslint . --ext .ts,.tsx --fix",
+    "format": "npm prettier --write .",
+    "typecheck": "npm tsc --noEmit",
+    "prepare": "husky install",
+    "postinstall": "bun run prepare"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx,js,jsx}": [
+      "bunx eslint --fix",
+      "bunx prettier --write"
+    ],
+    "**/*.{json,md,css}": [
+      "bunx prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.4",
+    "@types/bcryptjs": "^3.0.0",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.14.0",
+    "@types/nodemailer": "^6.4.17",
+    "@types/swagger-ui-express": "^4.1.8",
+    "@types/yamljs": "^0.2.34",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.24.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.2",
+    "nodemailer": "^6.10.0",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  }
+}

@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  title: super dev Backend API
+  version: 1.0.0
+  description: API documentation for super dev Backend
+servers:
+  - url: 
+    description: Local server
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      description: Registers a new user in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+                name:
+                  type: string
+                userName:
+                  type: string
+                phone:
+                  type: string
+              required:
+                - email
+                - password
+                - name
+                - userName
+                - phone
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: User already exists
+  /resend-verification-code:
+    post:
+      summary: Resend verification code
+      description: Resends the verification code to the user's email.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        '200':
+          description: Verification code resent successfully
+        '400':
+          description: User not found or already verified
+  /verify-user:
+    post:
+      summary: Verify user
+      description: Verifies the user using the verification code.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                verificationCode:
+                  type: number
+              required:
+                - email
+                - verificationCode
+      responses:
+        '200':
+          description: User verified successfully
+        '400':
+          description: Invalid or expired verification code
+  /login:
+    post:
+      summary: Login user
+      description: Logs in a user and returns an access token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                userName:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - userName
+                - password
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Invalid login credentials
