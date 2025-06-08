@@ -11,6 +11,6 @@
     "rootDir": "./",
     "types": ["node", "express"]
   },
-  "include": ["**/*.ts"],
+  "include": ["**/*.ts", "src/config/passport.ts"],
   "exclude": ["node_modules", "dist"]
 }

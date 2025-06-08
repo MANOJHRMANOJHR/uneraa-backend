@@ -6,6 +6,7 @@ import YAML from 'yamljs';
 import userRouter from './src/routes/auth.routes';
 import { globalErrorHandler } from './src/middleware/globalError';
 import bodyParser from 'body-parser';
+import passport from 'passport';
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,7 @@ const PORT = process.env.PORT || 5000;
 // Load Swagger YAML file
 const swaggerDocument = YAML.load('./src/swaggerAPI/swagger.yml');
 
+app.use(passport.initialize());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

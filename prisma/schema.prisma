@@ -32,6 +32,9 @@ model User {
   isObsolete Boolean @default(false)
   CreatedAt DateTime @default(now())
   UpdatedAt DateTime @updatedAt
+  googleId String? @unique
+  githubId String? @unique
+  discordId String? @unique
 
   @@map("users")
 }
