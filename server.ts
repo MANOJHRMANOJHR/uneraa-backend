@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-import ConnectDB from './src/config/mongoDb';
 import userRouter from './src/routes/auth.routes';
 import { globalErrorHandler } from './src/middleware/globalError';
 import bodyParser from 'body-parser';
@@ -19,8 +18,6 @@ app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-// ConnectDB();
 
 // Serve Swagger API documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

@@ -5,6 +5,7 @@ import z from 'zod';
 import ApiError from '../utils/api-error';
 import { uploadOnCloudinary } from '../utils/cloudinary';
 import bcrypt from 'bcrypt';
+import { StatusCode } from '../constants/statusCode';
 
 export const userRegisterSchema = z.object({
   firstName: z.string().min(2).max(20),
@@ -31,8 +32,13 @@ const registerUser = async (req: Request, res: Response) => {
 
       if (existingUser) {
         res
-          .status(400)
-          .json(new ApiError(400, 'User already exist with this email'));
+          .status(StatusCode.CONFLICT)
+          .json(
+            new ApiError(
+              StatusCode.CONFLICT,
+              'User already exist with this email'
+            )
+          );
         return;
       }
       console.log('after returning');
@@ -91,12 +97,14 @@ const registerUser = async (req: Request, res: Response) => {
       });
 
       res
-        .status(200)
-        .json(new ApiResponse(200, true, 'Fetched success', createdUser));
+        .status(StatusCode.OK)
+        .json(
+          new ApiResponse(StatusCode.OK, true, 'Fetched success', createdUser)
+        );
       return;
     } else {
-      res.status(400).json({
-        statsuCode: 400,
+      res.status(StatusCode.BAD_REQUEST).json({
+        statsuCode: StatusCode.BAD_REQUEST,
         message: 'Input Validation failed',
         error: error,
       });
@@ -105,7 +113,15 @@ const registerUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.log('error in catch', error);
 
-    res.status(500).json(new ApiError(500, 'Internal Server Error', [error]));
+    res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json(
+        new ApiError(
+          StatusCode.INTERNAL_SERVER_ERROR,
+          'Internal Server Error',
+          [error]
+        )
+      );
     return;
   }
 };
