@@ -20,21 +20,119 @@ enum Role {
 }
 
 model User {
-  id String @id @default(cuid())
-  firstName String 
-  lastName String
-  email String @unique
-  password String
-  profileImgUrl String
-  coverImgUrl String
-  role Role @default(USER)
-  bio String
-  isObsolete Boolean @default(false)
-  CreatedAt DateTime @default(now())
-  UpdatedAt DateTime @updatedAt
-  googleId String? @unique
-  githubId String? @unique
-  discordId String? @unique
+  id             String     @id @default(cuid())
+  name           String
+  username       String     @unique
+  email          String     @unique
+  profileImgUrl  String?
+  coverImgUrl    String?
+  role           Role       @default(USER)
+  bio            String?
+  techStack      String[]
+  portfolioLink  String?
+  posts          Post[]     @relation("CreatedPosts")
+  comments       Comment[]  @relation("UserComment")
+  likes          Like[]     @relation("UserLikes")
+  followers      User[]     @relation("UserFollows")
+  following      User[]     @relation("UserFollows")
+  savedPosts     Post[]     @relation("UserSavedPosts")
+  bookmarks      Bookmark[] @relation("UserBookmarks")
+  blockedUsers   Block[]    @relation("userBlocked")
+  blockedByUsers Block[]    @relation("userBlockedBy")
+  isOnline       Boolean    @default(true)
+  lastActiveAt   DateTime   @default(now())
+  isObsolete     Boolean    @default(false)
+  CreatedAt      DateTime   @default(now())
+  UpdatedAt      DateTime   @updatedAt
+  googleId       String?    @unique
+  githubId       String?    @unique
+  discordId      String?    @unique
 
+  //TODO : report feature 
   @@map("users")
 }
+
+model Block {
+  id              String @id @default(cuid())
+  userBlockedId   String
+  userBlocked     User   @relation("userBlocked", fields: [userBlockedId], references: [id])
+  userBlockedById String
+  userBlockedBy   User   @relation("userBlockedBy", fields: [userBlockedById], references: [id])
+}
+
+model Post {
+  id         String     @id @default(cuid())
+  title      String
+  content    String
+  markdown   String?
+  author     User       @relation("CreatedPosts", fields: [authorId], references: [id])
+  authorId   String
+  imageUrl   String?
+  videoUrl   String?
+  embedUrl   String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  published  Boolean    @default(true)
+  likes      Like[]     @relation("PostLikes")
+  comments   Comment[]  @relation("PostComments")
+  savedBy    User[]     @relation("UserSavedPosts")
+  tags       Tag[]      @relation("PostTags")
+  category   Category   @relation("PostCategory", fields: [categoryId], references: [id])
+  categoryId String
+  bookmarks  Bookmark[] @relation("PostBookmarks")
+  draft      Boolean    @default(false)
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  author    User     @relation("UserComment", fields: [authorId], references: [id])
+  authorId  String
+  post      Post     @relation("PostComments", fields: [postId], references: [id])
+  postId    String
+  parentId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  user      User     @relation("UserLikes", fields: [userId], references: [id])
+  userId    String
+  post      Post     @relation("PostLikes", fields: [postId], references: [id])
+  postId    String
+  emoji     String?
+  createdAt DateTime @default(now())
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[] @relation("PostTags")
+}
+
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[] @relation("PostCategory")
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  user      User     @relation("UserBookmarks", fields: [userId], references: [id])
+  userId    String
+  post      Post     @relation("PostBookmarks", fields: [postId], references: [id])
+  postId    String
+  createdAt DateTime @default(now())
+}
+
+// model Notification {
+//   id        String      @id @default()
+//   type      String
+//   userId    Int
+//   senderId  Int?
+//   postId    Int?
+//   commentId Int?
+//   read      Boolean  @default(false)
+//   createdAt DateTime @default(now())
+// }

@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "Comment" ALTER COLUMN "parentId" SET DATA TYPE TEXT;
+
+-- AlterTable
+ALTER TABLE "users" ALTER COLUMN "profileImgUrl" DROP NOT NULL,
+ALTER COLUMN "coverImgUrl" DROP NOT NULL,
+ALTER COLUMN "bio" DROP NOT NULL;
