@@ -1,26 +1,19 @@
 import prisma from '../lib/prisma';
 import { Request, Response } from 'express';
 import ApiResponse from '../utils/api-response';
-import z from 'zod';
 import ApiError from '../utils/api-error';
 import { uploadOnCloudinary } from '../utils/cloudinary';
 import bcrypt from 'bcrypt';
 import { StatusCode } from '../constants/statusCode';
-
-export const userRegisterSchema = z.object({
-  firstName: z.string().min(2).max(20),
-  lastName: z.string().min(2).max(20),
-  email: z.string().email(),
-  password: z.string().min(6).max(20),
-  bio: z.string().max(700),
-});
+import { userRegisterSchema } from './constrollersSchema';
+import { getUniqueUserName } from '../utils/uniqueUserName';
 
 const registerUser = async (req: Request, res: Response) => {
   try {
     const { success, data, error } = userRegisterSchema.safeParse(req.body);
 
     if (success) {
-      const { firstName, lastName, email, password, bio } = data;
+      const { name, email, password, bio } = data;
       let profileImgLocalPath, coverImgLocalPath;
       let profileImgUrl, coverImgUrl;
 
@@ -72,21 +65,18 @@ const registerUser = async (req: Request, res: Response) => {
         );
       }
 
-      const hasedPassword = await bcrypt.hash(password, 13);
-
+      const uniqueUsername = await getUniqueUserName(email);
       const createdUser = await prisma.user.create({
         data: {
-          firstName,
-          lastName,
+          name,
           email,
-          password: hasedPassword,
           bio,
+          username: uniqueUsername,
           profileImgUrl: profileImgUrl?.url || '',
           coverImgUrl: coverImgUrl?.url || '',
         },
         select: {
-          firstName: true,
-          lastName: true,
+          name: true,
           email: true,
           bio: true,
           profileImgUrl: true,

@@ -73,6 +73,8 @@ model Post {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   published  Boolean    @default(true)
+  publishedAt DateTime?
+  views      Int        @default(0)
   likes      Like[]     @relation("PostLikes")
   comments   Comment[]  @relation("PostComments")
   savedBy    User[]     @relation("UserSavedPosts")
