@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import ApiError from '../utils/api-error';
 import { sendErrorToDiscord, sendErrorToEmail } from '../utils/notifier';
 import { StatusCode } from '../constants/statusCode';
-import ApiResponce from '../utils/api-respoce';
+import ApiResponce from '../utils/api-response';
 
 
 // Extend the Request interface to include the user property
