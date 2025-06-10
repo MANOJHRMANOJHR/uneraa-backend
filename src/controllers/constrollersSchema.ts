@@ -1,0 +1,24 @@
+import z from 'zod';
+
+export const userRegisterSchema = z.object({
+  name: z.string().min(2).max(20),
+  email: z.string().email(),
+  password: z.string().min(6).max(20),
+  bio: z.string().max(700),
+});
+
+export const userPostSchema = z.object({  
+  title: z.string().min(2).max(100),
+  content: z.string().min(10).max(5000),
+  tags: z.array(z.string()).max(10).optional(),
+  imageUrl: z.string().url().optional(),
+  markdown: z.string().min(10).max(5000).optional(),
+  category: z.string().min(2).max(50).optional(),
+  categoryId: z.string().min(1).max(50).optional(),
+  authorId: z.string().min(1).max(50),
+  videoUrl: z.string().url().optional(),
+  embedUrl: z.string().url().optional(),
+  isPublished: z.boolean().optional(),
+  publishedAt: z.string().optional(),
+  
+});

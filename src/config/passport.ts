@@ -3,6 +3,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import { Strategy as DiscordStrategy } from 'passport-discord';
 import prisma from '../lib/prisma';
+import { getUniqueUserName } from '../utils/uniqueUserName';
 
 // Load environment variables
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
@@ -89,6 +90,7 @@ passport.use(
 async function findOrCreateUser(provider: string, profile: any) {
   try {
     const email = getEmailFromProfile(provider, profile);
+    const uniqueUserName = await getUniqueUserName(email);
 
     console.log("user's email extracted", email);
     // Check if user exists with this email
@@ -101,9 +103,8 @@ async function findOrCreateUser(provider: string, profile: any) {
       user = await prisma.user.create({
         data: {
           email,
-          firstName: getFirstNameFromProfile(provider, profile),
-          lastName: getLastNameFromProfile(provider, profile),
-          password: '',
+          name: getFirstNameFromProfile(provider, profile),
+          username: uniqueUserName,
           bio: '',
           profileImgUrl: getProfileImageFromProfile(provider, profile),
           coverImgUrl: '',
