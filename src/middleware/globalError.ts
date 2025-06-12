@@ -4,18 +4,14 @@ import { sendErrorToDiscord, sendErrorToEmail } from '../utils/notifier';
 import { StatusCode } from '../constants/statusCode';
 import ApiResponce from '../utils/api-response';
 
-
 // Extend the Request interface to include the user property
 declare global {
-    namespace Express {
-      interface Request {
-        user?: {
-          email?: string;
-        };
-      }
+  namespace Express {
+    interface Request {
+      email?: string;
     }
   }
-
+}
 
 export const globalErrorHandler = async (
   err: ApiError,
@@ -32,7 +28,7 @@ export const globalErrorHandler = async (
     stack: err.stack,
     route: req.originalUrl,
     method: req.method,
-    body: req.body,  // include form data
+    body: req.body, // include form data
     user: req.user?.email || req.body?.email || 'Guest',
   };
 
@@ -41,6 +37,6 @@ export const globalErrorHandler = async (
   // await sendErrorToEmail(errorInfo);
 
   return res
-  .status(statusCode)
-  .json(new ApiResponce(statusCode, false, message, errors));
+    .status(statusCode)
+    .json(new ApiResponce(statusCode, false, message, errors));
 };

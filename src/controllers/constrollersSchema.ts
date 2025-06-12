@@ -3,11 +3,11 @@ import z from 'zod';
 export const userRegisterSchema = z.object({
   name: z.string().min(2).max(20),
   email: z.string().email(),
-  password: z.string().min(6).max(20),
+  password: z.string().min(8).max(20),
   bio: z.string().max(700),
 });
 
-export const userPostSchema = z.object({  
+export const userPostSchema = z.object({
   title: z.string().min(2).max(100),
   content: z.string().min(10).max(5000),
   tags: z.array(z.string()).max(10).optional(),
@@ -20,5 +20,12 @@ export const userPostSchema = z.object({
   embedUrl: z.string().url().optional(),
   isPublished: z.boolean().optional(),
   publishedAt: z.string().optional(),
-  
+});
+
+export const userEditSchema = z.object({
+  name: z.string().min(2).max(20).optional(),
+  email: z.string().email().optional(),
+  bio: z.string().max(700).optional(),
+  username: z.string().max(20).optional(),
+  portfolioLink: z.string().max(100).optional(),
 });

@@ -24,6 +24,7 @@ model User {
   name           String
   username       String     @unique
   email          String     @unique
+  password       String
   profileImgUrl  String?
   coverImgUrl    String?
   role           Role       @default(USER)
@@ -61,28 +62,28 @@ model Block {
 }
 
 model Post {
-  id         String     @id @default(cuid())
-  title      String
-  content    String
-  markdown   String?
-  author     User       @relation("CreatedPosts", fields: [authorId], references: [id])
-  authorId   String
-  imageUrl   String?
-  videoUrl   String?
-  embedUrl   String?
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  published  Boolean    @default(true)
+  id          String     @id @default(cuid())
+  title       String
+  content     String
+  markdown    String?
+  author      User       @relation("CreatedPosts", fields: [authorId], references: [id])
+  authorId    String
+  imageUrl    String?
+  videoUrl    String?
+  embedUrl    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  published   Boolean    @default(true)
   publishedAt DateTime?
-  views      Int        @default(0)
-  likes      Like[]     @relation("PostLikes")
-  comments   Comment[]  @relation("PostComments")
-  savedBy    User[]     @relation("UserSavedPosts")
-  tags       Tag[]      @relation("PostTags")
-  category   Category   @relation("PostCategory", fields: [categoryId], references: [id])
-  categoryId String
-  bookmarks  Bookmark[] @relation("PostBookmarks")
-  draft      Boolean    @default(false)
+  views       Int        @default(0)
+  likes       Like[]     @relation("PostLikes")
+  comments    Comment[]  @relation("PostComments")
+  savedBy     User[]     @relation("UserSavedPosts")
+  tags        Tag[]      @relation("PostTags")
+  category    Category   @relation("PostCategory", fields: [categoryId], references: [id])
+  categoryId  String
+  bookmarks   Bookmark[] @relation("PostBookmarks")
+  draft       Boolean    @default(false)
 }
 
 model Comment {
