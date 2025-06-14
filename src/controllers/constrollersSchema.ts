@@ -1,5 +1,12 @@
 import z from 'zod';
 
+export enum EmojiType {
+  LIKE = 'like',
+  LAUGH = 'laugh',
+  CRY = 'cry',
+  ANGRY = 'angry'
+}
+
 export const userRegisterSchema = z.object({
   name: z.string().min(2).max(20),
   email: z.string().email(),
