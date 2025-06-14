@@ -6,9 +6,9 @@ import { generateToken } from '../utils/jwt-token';
 import { StatusCode } from '../constants/statusCode';
 import ApiResponse from '../utils/api-response';
 
-const userRouter: Router = Router();
+const authRouter: Router = Router();
 
-userRouter.route('/register').post(
+authRouter.route('/register').post(
   upload.fields([
     { name: 'profileImage', maxCount: 1 },
     { name: 'coverImage', maxCount: 1 },
@@ -17,10 +17,10 @@ userRouter.route('/register').post(
 );
 
 //google auth route
-userRouter
+authRouter
   .route('/google')
   .get(passport.authenticate('google', { scope: ['profile', 'email'] }));
-userRouter.route('/google/callback').get(
+authRouter.route('/google/callback').get(
   passport.authenticate('google', {
     session: false,
     failureRedirect: '/login',
@@ -29,10 +29,10 @@ userRouter.route('/google/callback').get(
 );
 
 //github auth route
-userRouter
+authRouter
   .route('/github')
   .get(passport.authenticate('github', { scope: ['user:email'] }));
-userRouter.route('/github/callback').get(
+authRouter.route('/github/callback').get(
   passport.authenticate('github', {
     session: false,
     failureRedirect: '/login',
@@ -40,10 +40,10 @@ userRouter.route('/github/callback').get(
   handleOAuthCallback
 );
 
-userRouter
+authRouter
   .route('/discord')
   .get(passport.authenticate('discord', { scope: ['identify', 'email'] }));
-userRouter.route('/discord/callback').get(
+authRouter.route('/discord/callback').get(
   passport.authenticate('discord', {
     session: false,
     failureRedirect: '/login',
@@ -70,4 +70,4 @@ function handleOAuthCallback(req: Request, res: Response) {
   return;
 }
 
-export default userRouter;
+export default authRouter;

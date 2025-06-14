@@ -3,10 +3,10 @@ import { Request, Response } from 'express';
 import ApiResponse from '../utils/api-response';
 import ApiError from '../utils/api-error';
 import { uploadOnCloudinary } from '../utils/cloudinary';
-import bcrypt from 'bcrypt';
 import { StatusCode } from '../constants/statusCode';
 import { userRegisterSchema } from './constrollersSchema';
 import { getUniqueUserName } from '../utils/uniqueUserName';
+import bcrypt from 'bcrypt';
 
 const registerUser = async (req: Request, res: Response) => {
   try {
@@ -34,7 +34,6 @@ const registerUser = async (req: Request, res: Response) => {
           );
         return;
       }
-      console.log('after returning');
       if (
         req.files &&
         typeof req.files === 'object' &&
@@ -66,11 +65,15 @@ const registerUser = async (req: Request, res: Response) => {
       }
 
       const uniqueUsername = await getUniqueUserName(email);
+
+      const hashedPassword = await bcrypt.hash(password, 12);
+
       const createdUser = await prisma.user.create({
         data: {
           name,
           email,
           bio,
+          password: hashedPassword,
           username: uniqueUsername,
           profileImgUrl: profileImgUrl?.url || '',
           coverImgUrl: coverImgUrl?.url || '',
