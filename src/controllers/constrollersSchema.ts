@@ -14,6 +14,11 @@ export const userRegisterSchema = z.object({
   bio: z.string().max(700),
 });
 
+export const userLoginSchema = z.object({
+  emailOrUsername: z.string().email(),
+  password: z.string().min(8).max(20),
+});
+
 export const userPostSchema = z.object({
   title: z.string().min(2).max(100),
   content: z.string().min(10).max(5000),
@@ -35,4 +40,9 @@ export const userEditSchema = z.object({
   bio: z.string().max(700).optional(),
   username: z.string().max(20).optional(),
   portfolioLink: z.string().max(100).optional(),
+});
+
+export const userFollowerSchema = z.object({
+  followingId: z.string(),
+  followerId: z.string(),
 });
