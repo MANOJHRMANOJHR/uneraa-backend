@@ -12,7 +12,7 @@
 - **Formatting:** Prettier
 - **Linting:** ESLint
 - **Hooks:** Husky + lint-staged
-- **DB:** MongoDB (with Mongoose)
+- **DB:** Postgres (PRISMA)
 - **Other:** Redis, JWT, Nodemailer, Socket.io, Swagger
 
 ---

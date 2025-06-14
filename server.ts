@@ -8,6 +8,7 @@ import { globalErrorHandler } from './src/middleware/globalError';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import postRouter from './src/routes/post.routes';
+import userRouter from './src/routes/user.routes';
 
 dotenv.config();
 const app = express();
@@ -26,7 +27,8 @@ app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/api/v1/auth', authRouter);
-app.use('api/v1/post', postRouter);
+app.use('/api/v1/post', postRouter);
+app.use('/api/v1/user', userRouter);
 app.get('/', (req, res) => {
   res.send('Hello chetas!');
 });

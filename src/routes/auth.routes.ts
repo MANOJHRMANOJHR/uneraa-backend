@@ -51,6 +51,8 @@ authRouter.route('/discord/callback').get(
   handleOAuthCallback
 );
 
+authRouter.route("/login").post(authController.loginUser);
+
 function handleOAuthCallback(req: Request, res: Response) {
   console.log('user in callback', req.user);
   const user = req.user!;

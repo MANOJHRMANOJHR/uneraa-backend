@@ -4,9 +4,10 @@ import ApiResponse from '../utils/api-response';
 import ApiError from '../utils/api-error';
 import { uploadOnCloudinary } from '../utils/cloudinary';
 import { StatusCode } from '../constants/statusCode';
-import { userRegisterSchema } from './constrollersSchema';
+import { userLoginSchema, userRegisterSchema } from './constrollersSchema';
 import { getUniqueUserName } from '../utils/uniqueUserName';
 import bcrypt from 'bcrypt';
+import { generateToken } from '../utils/jwt-token';
 
 const registerUser = async (req: Request, res: Response) => {
   try {
@@ -38,6 +39,7 @@ const registerUser = async (req: Request, res: Response) => {
         req.files &&
         typeof req.files === 'object' &&
         !Array.isArray(req.files) &&
+        req.files.profileImage &&
         req.files.profileImage.length > 0
       ) {
         profileImgLocalPath = req.files.profileImage[0].path;
@@ -46,6 +48,7 @@ const registerUser = async (req: Request, res: Response) => {
         req.files &&
         typeof req.files === 'object' &&
         !Array.isArray(req.files) &&
+        req.files.coverImage &&
         req.files.coverImage.length > 0
       ) {
         coverImgLocalPath = req.files.coverImage[0].path;
@@ -119,4 +122,79 @@ const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { registerUser };
+const loginUser = async (req: Request, res: Response) => {
+  try {
+    console.log('body', req.body);
+    const { success, data, error } = userLoginSchema.safeParse(req.body);
+
+    if (error) {
+      res
+        .status(StatusCode.BAD_REQUEST)
+        .json(
+          new ApiError(StatusCode.BAD_REQUEST, 'Input validation failed', [
+            error,
+          ])
+        );
+      return;
+    }
+
+    if (success && data) {
+      const { emailOrUsername, password } = data;
+
+      const user = await prisma.user.findFirst({
+        where: {
+          OR: [
+            {
+              email: emailOrUsername,
+            },
+            {
+              username: emailOrUsername,
+            },
+          ],
+        },
+      });
+
+      if (!user || !user.password) {
+        res
+          .status(StatusCode.NOT_FOUND)
+          .json(new ApiError(StatusCode.NOT_FOUND, 'Invalid Credentials'));
+        return;
+      }
+
+      const isCorrectPassword = await bcrypt.compare(password, user?.password);
+
+      if (isCorrectPassword) {
+        const token = generateToken(user);
+
+        res
+          .status(StatusCode.OK)
+          .json(
+            new ApiResponse(
+              StatusCode.OK,
+              true,
+              'Signed in successfully',
+              token
+            )
+          );
+        return;
+      } else {
+        res
+          .status(StatusCode.BAD_REQUEST)
+          .json(new ApiError(StatusCode.BAD_REQUEST, 'Invalid Credentials'));
+        return;
+      }
+    }
+  } catch (error) {
+    res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json(
+        new ApiError(
+          StatusCode.INTERNAL_SERVER_ERROR,
+          'Operation failed. Internal server error'
+        )
+      );
+    return;
+  }
+};
+
+export default { registerUser, loginUser };

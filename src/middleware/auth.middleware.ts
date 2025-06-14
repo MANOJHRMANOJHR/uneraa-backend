@@ -12,9 +12,18 @@ export async function authorizeUser(
   next: NextFunction
 ) {
   try {
-    const token =
-      req.headers.authorization?.replace('Bearer ', '') ||
-      req.cookies?.access_token;
+    const tokenArr = req.headers.authorization?.split(' ');
+
+    if (!tokenArr || tokenArr.length < 2) {
+      res
+        .status(StatusCode.BAD_REQUEST)
+        .json(new ApiError(StatusCode.BAD_REQUEST, 'Invalid token'));
+      return;
+    }
+
+    const token = tokenArr[1] || req.cookies?.access_token;
+
+    console.log('token', token);
 
     if (!token) {
       res
@@ -63,6 +72,7 @@ export async function authorizeUser(
 
     next();
   } catch (error) {
+    console.log('error in auth', error);
     res
       .status(StatusCode.INTERNAL_SERVER_ERROR)
       .json(

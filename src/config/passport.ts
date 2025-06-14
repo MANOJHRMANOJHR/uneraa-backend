@@ -159,19 +159,6 @@ function getFirstNameFromProfile(provider: string, profile: any): string {
   }
 }
 
-function getLastNameFromProfile(provider: string, profile: any): string {
-  switch (provider) {
-    case 'google':
-      return profile.name.familyName || '';
-    case 'github':
-      const nameParts = profile.displayName?.split(' ') || [];
-      return nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-    case 'discord':
-      return '';
-    default:
-      return '';
-  }
-}
 
 function getProfileImageFromProfile(provider: string, profile: any): string {
   switch (provider) {

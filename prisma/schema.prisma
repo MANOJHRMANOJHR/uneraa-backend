@@ -24,7 +24,7 @@ model User {
   name           String
   username       String     @unique
   email          String     @unique
-  password       String
+  password       String?
   profileImgUrl  String?
   coverImgUrl    String?
   role           Role       @default(USER)
