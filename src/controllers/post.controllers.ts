@@ -5,6 +5,7 @@ import ApiError from '../utils/api-error';
 import { uploadOnCloudinary } from '../utils/cloudinary';
 import { StatusCode } from '../constants/statusCode';
 import { userPostSchema } from './constrollersSchema';
+import { EmojiType } from './constrollersSchema';
 
 const createPost = async (req: Request, res: Response) => {
   try {
@@ -152,14 +153,8 @@ const updatePost = async (req: Request, res: Response) => {
         title,
         content,
         tags,
-        imageUrl,
         markdown,
         category,
-        authorId,
-        videoUrl,
-        embedUrl,
-        isPublished,
-        publishedAt,
       } = data;
 
       let imageLocalPath, videoLocalPath;
@@ -216,9 +211,124 @@ const updatePost = async (req: Request, res: Response) => {
     res.status(StatusCode.INTERNAL_SERVER_ERROR).json(new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Internal Server Error'));
   }
 }
+
+// Get likes for a post
+export const getPostLikes = async (req: Request, res: Response) => {
+  try {
+    const { postId } = req.params;
+
+    const likes = await prisma.like.findMany({
+      where: { postId },
+      include: { user: true }
+    });
+
+    return res.status(StatusCode.OK).json(
+      new ApiResponse(StatusCode.OK, true, 'Likes fetched', likes)
+    );
+  } catch (error) {
+    console.error('Error fetching likes:', error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json(
+      new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Internal Server Error')
+    );
+  }
+};
+
+// Toggle like/dislike on a post
+export const toggleLike = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { postId, emoji } = req.body;
+    const userId = req.body.userId;
+
+    // Validate emoji
+    if (!Object.values(EmojiType).includes(emoji)) {
+      res.status(StatusCode.BAD_REQUEST).json(
+        new ApiError(StatusCode.BAD_REQUEST, 'Invalid emoji type')
+      );
+      return;
+    }
+
+    // Check if user already reacted (with any emoji)
+    const existing = await prisma.like.findFirst({
+      where: { postId, userId }
+    });
+
+    if (existing) {
+      if (existing.emoji === emoji) {
+        // Same emoji: remove reaction (dislike/unlike)
+        await prisma.like.delete({ where: { id: existing.id } });
+        res.status(StatusCode.OK).json(
+          new ApiResponse(StatusCode.OK, true, 'Reaction removed', {})
+        );
+      } else {
+        // Different emoji: update reaction
+        const updated = await prisma.like.update({
+          where: { id: existing.id },
+          data: { emoji }
+        });
+        res.status(StatusCode.OK).json(
+          new ApiResponse(StatusCode.OK, true, 'Reaction updated', updated)
+        );
+      }
+    } else {
+      // No reaction yet: create new like
+      const like = await prisma.like.create({
+        data: {
+          postId,
+          userId,
+          emoji
+        }
+      });
+      res.status(StatusCode.CREATED).json(
+        new ApiResponse(StatusCode.CREATED, true, 'Reaction added', like)
+      );
+    }
+  } catch (error) {
+    console.error('Error toggling reaction:', error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json(
+      new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Internal Server Error')
+    );
+  }
+};
+
+export const createComment = async (req: Request, res: Response) => {
+  try {
+    const { content, postId, authorId, parentId } = req.body;
+
+    if (!content || !postId || !authorId) {
+      return res.status(StatusCode.BAD_REQUEST).json(
+        new ApiError(StatusCode.BAD_REQUEST, 'Missing required fields')
+      );
+    }
+
+    const comment = await prisma.comment.create({
+      data: {
+        content,
+        postId,
+        authorId,
+        parentId: parentId || null
+      },
+      include: {
+        author: true
+      }
+    });
+
+    res.status(StatusCode.CREATED).json(
+      new ApiResponse(StatusCode.CREATED, true, 'Comment created', comment)
+    );
+  } catch (error) {
+    console.error('Error creating comment:', error);
+    res.status(StatusCode.INTERNAL_SERVER_ERROR).json(
+      new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Internal Server Error')
+    );
+  }
+};
+
 export default {
   createPost,
   getPosts,
   deletePost,
   updatePost,
+  getPostLikes,
+  toggleLike,
+  createComment
 };
