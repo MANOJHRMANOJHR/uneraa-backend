@@ -16,10 +16,8 @@ postRouter.route('/').get(
   postController.getPosts
 );
 postRouter.route('/:id/like').post(
-  postController.likePost
+  postController.toggleLike
 );
-postRouter.route('/:id/unlike').post(
-  postController.unlikePost
-);
+
 
 export default postRouter;
