@@ -9,6 +9,9 @@ import { getUniqueUserName } from '../utils/uniqueUserName';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/jwt-token';
 
+const secureEnvironment =
+  process.env.ENVIRONMENT === 'development' ? false : true;
+
 const registerUser = async (req: Request, res: Response) => {
   try {
     const { success, data, error } = userRegisterSchema.safeParse(req.body);
@@ -165,6 +168,12 @@ const loginUser = async (req: Request, res: Response) => {
 
       if (isCorrectPassword) {
         const token = generateToken(user);
+
+        res.cookie('auth_token', token, {
+          httpOnly: true,
+          secure: secureEnvironment,
+          sameSite: 'strict',
+        });
 
         res
           .status(StatusCode.OK)
