@@ -9,6 +9,9 @@ import { authorizeUser } from '../middleware/auth.middleware';
 
 const secureEnvironment =
   process.env.ENVIRONMENT === 'development' ? false : true;
+
+const frontendRedirectUrl =
+  process.env.FRONTEND_REDIRECT_URL || 'http://localhost:3000/@me';
 const authRouter: Router = Router();
 
 authRouter.route('/register').post(
@@ -69,11 +72,14 @@ function handleOAuthCallback(req: Request, res: Response) {
     secure: secureEnvironment,
     sameSite: 'strict',
   });
-  res.status(StatusCode.OK).json(
-    new ApiResponse(StatusCode.OK, true, 'Authentication successful', {
-      token,
-    })
-  );
+
+  res.redirect(frontendRedirectUrl);
+
+  // res.status(StatusCode.OK).json(
+  //   new ApiResponse(StatusCode.OK, true, 'Authentication successful', {
+  //     token,
+  //   })
+  // );
   return;
 }
 
