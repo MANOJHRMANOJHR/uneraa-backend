@@ -1,5 +1,5 @@
 import prisma from '../lib/prisma';
-import { Request, Response } from 'express';
+import { CookieOptions, Request, Response } from 'express';
 import ApiResponse from '../utils/api-response';
 import ApiError from '../utils/api-error';
 import { uploadOnCloudinary } from '../utils/cloudinary';
@@ -206,4 +206,47 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export default { registerUser, loginUser };
+const logoutUser = async (req: Request, res: Response) => {
+  try {
+    const userEmail = req.user?.email;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: userEmail,
+      },
+    });
+
+    if (!user) {
+      res
+        .status(StatusCode.NOT_FOUND)
+        .json(new ApiError(StatusCode.NOT_FOUND, 'User not found'));
+      return;
+    }
+
+    const options: CookieOptions = {
+      httpOnly: true,
+      secure: secureEnvironment,
+      sameSite: 'strict',
+    };
+
+    res
+      .status(StatusCode.OK)
+      .clearCookie('auth_token', options)
+      .json(
+        new ApiResponse(StatusCode.OK, true, 'User loggedout Successfully', {})
+      );
+    return;
+  } catch (error) {
+    res
+      .status(StatusCode.INTERNAL_SERVER_ERROR)
+      .json(
+        new ApiError(
+          StatusCode.INTERNAL_SERVER_ERROR,
+          'Internal server error',
+          [error]
+        )
+      );
+  }
+};
+
+export default { registerUser, loginUser, logoutUser };

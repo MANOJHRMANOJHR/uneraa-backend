@@ -5,6 +5,7 @@ import passport from '../config/passport';
 import { generateToken } from '../utils/jwt-token';
 import { StatusCode } from '../constants/statusCode';
 import ApiResponse from '../utils/api-response';
+import { authorizeUser } from '../middleware/auth.middleware';
 
 const secureEnvironment =
   process.env.ENVIRONMENT === 'development' ? false : true;
@@ -54,6 +55,8 @@ authRouter.route('/discord/callback').get(
 );
 
 authRouter.route('/login').post(authController.loginUser);
+
+authRouter.route('/logout').post(authorizeUser, authController.logoutUser);
 
 function handleOAuthCallback(req: Request, res: Response) {
   console.log('user in callback', req.user);
