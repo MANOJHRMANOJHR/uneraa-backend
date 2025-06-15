@@ -6,6 +6,8 @@ import { generateToken } from '../utils/jwt-token';
 import { StatusCode } from '../constants/statusCode';
 import ApiResponse from '../utils/api-response';
 
+const secureEnvironment =
+  process.env.ENVIRONMENT === 'development' ? false : true;
 const authRouter: Router = Router();
 
 authRouter.route('/register').post(
@@ -51,7 +53,7 @@ authRouter.route('/discord/callback').get(
   handleOAuthCallback
 );
 
-authRouter.route("/login").post(authController.loginUser);
+authRouter.route('/login').post(authController.loginUser);
 
 function handleOAuthCallback(req: Request, res: Response) {
   console.log('user in callback', req.user);
@@ -61,7 +63,7 @@ function handleOAuthCallback(req: Request, res: Response) {
 
   res.cookie('auth_token', token, {
     httpOnly: true,
-    secure: true,
+    secure: secureEnvironment,
     sameSite: 'strict',
   });
   res.status(StatusCode.OK).json(
