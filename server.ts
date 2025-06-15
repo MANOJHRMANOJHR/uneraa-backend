@@ -9,6 +9,7 @@ import bodyParser from 'body-parser';
 import passport from 'passport';
 import postRouter from './src/routes/post.routes';
 import userRouter from './src/routes/user.routes';
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,12 @@ const PORT = process.env.PORT || 5000;
 // Load Swagger YAML file
 const swaggerDocument = YAML.load('./src/swaggerAPI/swagger.yml');
 
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  })
+);
 app.use(passport.initialize());
 app.use(bodyParser.json());
 app.use(express.json());
