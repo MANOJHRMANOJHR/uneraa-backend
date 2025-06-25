@@ -34,8 +34,8 @@ model User {
   posts          Post[]     @relation("CreatedPosts")
   comments       Comment[]  @relation("UserComment")
   likes          Like[]     @relation("UserLikes")
-  followers      User[]     @relation("UserFollows")
-  following      User[]     @relation("UserFollows")
+  followers      Follow[]   @relation("followingRelation")
+  following      Follow[]   @relation("followersRelation")
   savedPosts     Post[]     @relation("UserSavedPosts")
   bookmarks      Bookmark[] @relation("UserBookmarks")
   blockedUsers   Block[]    @relation("userBlocked")
@@ -73,7 +73,7 @@ model Post {
   embedUrl    String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  published   Boolean    @default(true)
+  published   Boolean    @default(false)
   publishedAt DateTime?
   views       Int        @default(0)
   likes       Like[]     @relation("PostLikes")
@@ -83,7 +83,7 @@ model Post {
   category    Category   @relation("PostCategory", fields: [categoryId], references: [id])
   categoryId  String
   bookmarks   Bookmark[] @relation("PostBookmarks")
-  draft       Boolean    @default(false)
+  draft       Boolean    @default(true)
 }
 
 model Comment {
@@ -139,3 +139,14 @@ model Bookmark {
 //   read      Boolean  @default(false)
 //   createdAt DateTime @default(now())
 // }
+
+model Follow {
+  id           String   @id @default(cuid())
+  follower     User     @relation("followersRelation", fields: [followerId], references: [id])
+  followerId   String
+  following    User     @relation("followingRelation", fields: [followingId], references: [id])
+  followingId  String
+  createdAt    DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}

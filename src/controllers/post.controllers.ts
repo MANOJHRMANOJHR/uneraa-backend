@@ -6,6 +6,7 @@ import { uploadOnCloudinary } from '../utils/cloudinary';
 import { StatusCode } from '../constants/statusCode';
 import { userPostSchema } from './constrollersSchema';
 import { EmojiType } from './constrollersSchema';
+import { postQueue } from '../utils/jobs/postQueue';
 
 const createPost = async (req: Request, res: Response) => {
   try {
@@ -76,6 +77,14 @@ const createPost = async (req: Request, res: Response) => {
           publishedAt: publishedAt || null,
         },
       });
+
+      if (!isPublished && publishedAt && new Date(publishedAt) > new Date()) {
+        await postQueue.add('publishPost', {
+          postId: post.id
+        }, {
+          delay: new Date(publishedAt).getTime() - Date.now()
+      });
+    }
 
       res.status(StatusCode.CREATED).json(new ApiResponse(StatusCode.CREATED, true, "post creted successfully", post));
     } else {
