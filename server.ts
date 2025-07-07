@@ -2,12 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
-import authRouter from './src/routes/auth.routes';
-import { globalErrorHandler } from './src/middleware/globalError';
+import authRouter from './src/routes/auth.routes.js';
+import { globalErrorHandler } from './src/middleware/globalError.js';
 import bodyParser from 'body-parser';
 import passport from 'passport';
-import { RegisterRoutes } from './build/routes';
-import swaggerDocument from './src/docs/swagger.json';
+import { RegisterRoutes } from './build/routes.js';
+import swaggerDocument from './src/docs/swagger.json' assert { type: 'json' };
 
 import cors from 'cors';
 
