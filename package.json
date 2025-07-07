@@ -52,14 +52,14 @@
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
-    "prisma": "^6.9.0",
+    "prisma": "^6.11.1",
     "tsx": "^4.19.3"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@prisma/client": "^6.9.0",
+    "@prisma/client": "^6.11.1",
     "axios": "^1.8.4",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",

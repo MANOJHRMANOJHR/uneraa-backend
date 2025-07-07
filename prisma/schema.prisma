@@ -80,8 +80,8 @@ model Post {
   comments    Comment[]  @relation("PostComments")
   savedBy     User[]     @relation("UserSavedPosts")
   tags        Tag[]      @relation("PostTags")
-  category    Category   @relation("PostCategory", fields: [categoryId], references: [id])
-  categoryId  String
+  categoryId String?                  
+  category   Category? @relation("PostCategory", fields: [categoryId], references: [id])
   bookmarks   Bookmark[] @relation("PostBookmarks")
   draft       Boolean    @default(true)
 }
@@ -141,12 +141,12 @@ model Bookmark {
 // }
 
 model Follow {
-  id           String   @id @default(cuid())
-  follower     User     @relation("followersRelation", fields: [followerId], references: [id])
-  followerId   String
-  following    User     @relation("followingRelation", fields: [followingId], references: [id])
-  followingId  String
-  createdAt    DateTime @default(now())
+  id          String   @id @default(cuid())
+  follower    User     @relation("followersRelation", fields: [followerId], references: [id])
+  followerId  String
+  following   User     @relation("followingRelation", fields: [followingId], references: [id])
+  followingId String
+  createdAt   DateTime @default(now())
 
   @@unique([followerId, followingId])
 }

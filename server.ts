@@ -2,12 +2,10 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
-import YAML from 'yamljs';
 import authRouter from './src/routes/auth.routes';
 import { globalErrorHandler } from './src/middleware/globalError';
 import bodyParser from 'body-parser';
 import passport from 'passport';
-import postRouter from './src/routes/post.routes';
 import { RegisterRoutes } from './build/routes';
 import swaggerDocument from './src/docs/swagger.json';
 
@@ -35,7 +33,6 @@ app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // ✅ TSOA-generated routes
 RegisterRoutes(app); 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/post', postRouter);
 app.get('/', (req, res) => {
   res.send('Hello UNERRA!');
 });
