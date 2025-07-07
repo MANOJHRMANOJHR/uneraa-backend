@@ -46,3 +46,15 @@ export const userFollowerSchema = z.object({
   followingId: z.string(),
   followerId: z.string(),
 });
+
+export type UserEditInput = {
+  name?: string;
+  email?: string;
+  bio?: string;
+  username?: string;
+  portfolioLink?: string;
+};
+export type UserFollowerInput ={
+  followingId: string;
+  followerId: string;
+}

@@ -1,7 +1,9 @@
 import { Queue, Worker } from 'bullmq';
 import prisma from '../../lib/prisma';
 import emitter from '../emitter';
-import connection from '../redis';
+import redis from '../redis';
+
+const connection = redis()
 
 export const postQueue = new Queue('postQueue', { connection });
 
