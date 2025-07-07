@@ -1,4 +1,4 @@
-# 🚀 super-dev-be
+# 🚀 UNERRA-BE
 
 > ⚡ High-performance backend using [npm](https://npm.sh), TypeScript, Express, and modern dev tools (Husky, ESLint, Prettier)
 
@@ -22,8 +22,8 @@
 ### 1️⃣ Clone and Install
 
 ```bash
-git clone https://github.com/utkarshya24/super-dev-be.git
-cd super-dev-be
+git clone https://github.com/utkarshya24/unerra-be.git
+cd unerra-be
 npm install
 
 ```
