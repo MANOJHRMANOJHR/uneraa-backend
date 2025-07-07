@@ -219,95 +219,66 @@ export class PostController extends Controller {
    */
   @Patch('{id}')
   @Security('jwt')
-  @Response<ApiError>(StatusCode.UNAUTHORIZED, 'Unauthorized')
   @Response<ApiError>(StatusCode.BAD_REQUEST, 'Validation failed')
-  @Response<ApiError>(StatusCode.NOT_FOUND, 'Post not found')
-  public async updatePost(
-    @Request() req: AuthenticatedRequest,
-    @Path() id: string,
-    @Body() body: UserPostInput,
-    @UploadedFiles() files?: { image?: Express.Multer.File[]; video?: Express.Multer.File[] }
-  ): Promise<ApiResponse<any>> {
-    try {
-      const post = await prisma.post.findUnique({
-        where: { id },
-        select: { authorId: true }
-      });
+public async updatePost(
+  @Request() req: AuthenticatedRequest,
+  @Path() id: string,
 
-      if (!post) {
-        throw new ApiError(StatusCode.NOT_FOUND, 'Post not found');
-      }
+  // form‑fields for any updatable properties
+  @FormField() title?: string,
+  @FormField() content?: string,
+  @FormField() tags?: string,        // JSON stringified array
+  @FormField() category?: string,
+  @FormField() markdown?: string,
+  @FormField() videoUrl?: string,
+  @FormField() imageUrl?: string,
+  @FormField() embedUrl?: string,
+  @UploadedFiles() files?: {
+    image?: Express.Multer.File[];
+    video?: Express.Multer.File[];
+  }
+): Promise<ApiResponse<any>> {
+  // 1) Fetch & authorize
+  const existing = await prisma.post.findUnique({ where: { id }, select: { authorId: true } });
+  if (!existing) throw new ApiError(StatusCode.NOT_FOUND, 'Post not found');
+  if (existing.authorId !== req.user?.id) throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
 
-      if (post.authorId !== req.user?.id) {
-        throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
-      }
-
-      const validationResult = userPostSchema.safeParse(body);
-      if (!validationResult.success) {
-        throw new ApiError(
-          StatusCode.BAD_REQUEST,
-          'Validation failed',
-          validationResult.error.errors
-        );
-      }
-
-      const data = validationResult.data;
-      const { title, content, tags, markdown, category } = data;
-
-      let imageUrlOnCloudinary: string | undefined;
-      let videoUrlOnCloudinary: string | undefined;
-
-      if (files?.image && files.image.length > 0) {
-        const uploadResult = await uploadOnCloudinary(
-          files.image[0].path,
-          'post Images'
-        );
-        imageUrlOnCloudinary = typeof uploadResult === 'string' 
-          ? uploadResult 
-          : uploadResult?.url;
-      }
-
-      if (files?.video && files.video.length > 0) {
-        const uploadResult = await uploadOnCloudinary(
-          files.video[0].path,
-          'post Videos'
-        );
-        videoUrlOnCloudinary = typeof uploadResult === 'string' 
-          ? uploadResult 
-          : uploadResult?.url;
-      }
-
-      const tagsData = 
-        tags && tags.length > 0 
-          ? {
-              create: tags.map((tag: string) => ({ name: tag })),
-            }
-          : undefined;
-
-      const updatedPost = await prisma.post.update({
-        where: { id },
-        data: {
-          title,
-          content,
-          tags: tagsData,
-          markdown,
-          category: { connect: { id: category } },
-          imageUrl: imageUrlOnCloudinary ? imageUrlOnCloudinary : undefined,
-          videoUrl: videoUrlOnCloudinary ? videoUrlOnCloudinary : undefined,
-        },
-      });
-
-      return new ApiResponse(
-        StatusCode.OK,
-        true,
-        'Post updated successfully',
-        updatedPost
-      );
-    } catch (error) {
-      this.handlePrismaError(error);
-    }
+  // 2) Parse tags array from JSON string, if provided
+  let parsedTags: string[] | undefined;
+  if (tags) {
+    try { parsedTags = JSON.parse(tags); }
+    catch { throw new ApiError(StatusCode.BAD_REQUEST, 'Tags must be valid JSON array'); }
   }
 
+  // 3) Handle new file uploads
+  let imageUrlOnCloudinary: string | undefined;
+  let videoUrlOnCloudinary: string | undefined;
+  if (files?.image?.[0]?.path) {
+    const r = await uploadOnCloudinary(files.image[0].path, 'post Images');
+    imageUrlOnCloudinary = typeof r === 'string' ? r : r?.url;
+  }
+  if (files?.video?.[0]?.path) {
+    const r = await uploadOnCloudinary(files.video[0].path, 'post Videos');
+    videoUrlOnCloudinary = typeof r === 'string' ? r : r?.url;
+  }
+
+  // 4) Build Prisma update data with conditional spreads
+  const data= {
+    ...(title !== undefined && { title }),
+    ...(content !== undefined && { content }),
+    ...(parsedTags && { tags: { set: [], create: parsedTags.map(name => ({ name })) } }),
+    ...(markdown !== undefined && { markdown }),
+    ...(videoUrl || videoUrlOnCloudinary) && { videoUrl: videoUrl || videoUrlOnCloudinary },
+    ...(imageUrl || imageUrlOnCloudinary) && { imageUrl: imageUrl || imageUrlOnCloudinary },
+    ...(embedUrl !== undefined && { embedUrl }),
+    ...(category && { category: { connect: { id: category } } }),
+  };
+
+  // 5) Execute update
+  const updated = await prisma.post.update({ where: { id }, data });
+
+  return new ApiResponse(StatusCode.OK, true, 'Post updated successfully', updated);
+}
   /**
    * Get likes for a post
    */

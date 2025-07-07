@@ -29,7 +29,6 @@ export const globalErrorHandler = async (
     route: req.originalUrl,
     method: req.method,
     body: req.body, // include form data
-    user: req.user?.email || req.body?.email || 'Guest',
   };
 
   // // Send alerts

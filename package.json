@@ -11,7 +11,7 @@
     "test": "npx tsx server.ts",
     "start": "node ./dist/server.js",
     "dev": "tsx server.ts",
-    "build": "npm run tsoa && tsc",
+    "build": "tsc",
     "tsoa": "npm run tsoa:spec && npm run tsoa:routes",
     "tsoa:spec": "tsoa spec",
     "tsoa:routes": "tsoa routes",

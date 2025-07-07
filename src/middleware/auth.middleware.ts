@@ -7,10 +7,8 @@ import prisma from '../lib/prisma';
 const TOKEN_SECRET = process.env.JWT_SECRET || '';
 
 export async function authorizeUser(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+req: Request, name: string,
+  _scheme: unknown, res: Response, next: NextFunction) {
   try {
     const tokenArr = req.headers.authorization?.split(' ');
 
