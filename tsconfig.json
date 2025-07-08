@@ -12,9 +12,9 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "outDir": "./dist",
-    "rootDir": "./",
+    "rootDir": "/",
     "types": ["node", "express"]
   },
-  "include": ["**/*.ts", "src/config/passport.ts"],
+  "include": ["**/*.ts", "src/**/*.ts", "src/**/*.json"],
   "exclude": ["node_modules", "dist"]
 }

@@ -2,14 +2,14 @@
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import type { TsoaRoute } from '@tsoa/runtime';
-import {authorizeUser} from '../src/middleware/auth.middleware';
+import {authorizeUser} from '../middleware/auth.middleware';
 import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from './../src/controllers/user.controller';
+import { UserController } from '../controllers/user.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { PostController } from './../src/controllers/post.controllers';
+import { PostController } from '../controllers/post.controllers';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { AuthController } from './../src/controllers/auth.controllers';
+import { AuthController } from '../controllers/auth.controllers';
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
 import multer from 'multer';
 

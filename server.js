@@ -8,49 +8,31 @@ import bodyParser from 'body-parser';
 import passport from 'passport';
 import { RegisterRoutes } from './src/build/routes.js';
 import swaggerDocument from './src/docs/swagger.json' assert { type: 'json' };
-
 import cors from 'cors';
-
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
-
-app.use(
-  cors({
+app.use(cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true,
-  })
-);
+}));
 app.use(passport.initialize());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 // Serve Swagger API documentation
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 // ✅ TSOA-generated routes
-RegisterRoutes(app); 
+RegisterRoutes(app);
 app.use('/api/v1/auth', authRouter);
 app.get('/', (req, res) => {
-  res.send('Hello UNERRA!');
+    res.send('Hello UNERRA!');
 });
-
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
+app.use((err, req, res, next) => {
     globalErrorHandler(err, req, res, next);
-  }
-);
-
-
-
+});
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log('swagger docs available at http://localhost:8080/api/v1/docs');
+    console.log(`Server is running on port ${PORT}`);
+    console.log('swagger docs available at http://localhost:8080/api/v1/docs');
 });

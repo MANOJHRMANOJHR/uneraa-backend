@@ -12,7 +12,7 @@
     "description": "API Docs for UNERRA"
   },
   "routes": {
-    "routesDir": "build",
+    "routesDir": "./src/build",
     "basePath": "/api/v1"
 
   }
