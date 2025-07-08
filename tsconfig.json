@@ -12,7 +12,7 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "outDir": "./dist",
-    "rootDir": "/",
+    "rootDir": "./",
     "types": ["node", "express"]
   },
   "include": ["**/*.ts", "src/**/*.ts", "src/**/*.json"],
