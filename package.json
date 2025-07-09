@@ -11,7 +11,7 @@
     "test": "npx tsx server.ts",
     "start": "node ./dist/server.js",
     "dev": "tsx server.ts",
-    "build": "tsc && npm run copy-prisma",
+    "build": "tsc ",
     "copy-prisma": "cp -r generated/prisma dist/generated/",
     "tsoa": "npm run tsoa:spec && npm run tsoa:routes",
     "tsoa:spec": "tsoa spec",
