@@ -2,8 +2,8 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as GitHubStrategy } from 'passport-github2';
 import { Strategy as DiscordStrategy } from 'passport-discord';
-import prisma from '../lib/prisma';
-import { getUniqueUserName } from '../utils/uniqueUserName';
+import prisma from '../lib/prisma.js';
+import { getUniqueUserName } from '../utils/uniqueUserName.js';
 // Load environment variables
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';

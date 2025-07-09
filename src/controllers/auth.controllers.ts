@@ -10,16 +10,16 @@ import {
   UploadedFiles
 } from 'tsoa';
 import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
-import prisma from '../lib/prisma';
+import prisma from '../lib/prisma.js';
 import bcrypt from 'bcrypt';
-import { uploadOnCloudinary } from '../utils/cloudinary';
-import { generateToken } from '../utils/jwt-token';
-import { userLoginSchema, userRegisterSchema } from './constrollersSchema';
-import ApiError from '../utils/api-error';
-import ApiResponse from '../utils/api-response';
-import { StatusCode } from '../constants/statusCode';
-import { getUniqueUserName } from '../utils/uniqueUserName';
-import { AuthenticatedRequest } from './types/user.type';
+import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import { generateToken } from '../utils/jwt-token.js';
+import { userLoginSchema, userRegisterSchema } from './constrollersSchema.js';
+import ApiError from '../utils/api-error.js';
+import ApiResponse from '../utils/api-response.js';
+import { StatusCode } from '../constants/statusCode.js';
+import { getUniqueUserName } from '../utils/uniqueUserName.js';
+import { AuthenticatedRequest } from './types/user.type.js';
 
 @Route('auth')
 @Tags('Auth')

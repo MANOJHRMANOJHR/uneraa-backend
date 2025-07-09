@@ -1,7 +1,7 @@
 import { Queue, Worker } from 'bullmq';
-import prisma from '../../lib/prisma';
-import emitter from '../emitter';
-import redis from '../redis';
+import prisma from '../../lib/prisma.js';
+import emitter from '../emitter.js';
+import redis from '../redis.js';
 
 const connection = redis()
 

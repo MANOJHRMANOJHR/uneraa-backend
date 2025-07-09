@@ -15,7 +15,7 @@ import {
   UploadedFiles,
   FormField
 } from 'tsoa';
-import prisma from '../lib/prisma';
+import prisma from '../lib/prisma.js';
 import { Prisma } from '@prisma/client'; 
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { 
@@ -24,13 +24,13 @@ import {
   UserPostInput,
   EmojiInput,
   CommentInput
-} from './constrollersSchema';
-import ApiResponse from '../utils/api-response';
-import ApiError from '../utils/api-error';
-import { uploadOnCloudinary } from '../utils/cloudinary';
-import { StatusCode } from '../constants/statusCode';
-import { postQueue } from '../utils/jobs/postQueue';
-import { AuthenticatedRequest } from './types/user.type';
+} from './constrollersSchema.js';
+import ApiResponse from '../utils/api-response.js';
+import ApiError from '../utils/api-error.js';
+import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import { StatusCode } from '../constants/statusCode.js';
+import { postQueue } from '../utils/jobs/postQueue.js';
+import { AuthenticatedRequest } from './types/user.type.js';
 
 @Route('post')
 @Tags('Post')

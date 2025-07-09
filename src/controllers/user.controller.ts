@@ -13,11 +13,11 @@ import {
   Post,
   Response,
 } from 'tsoa';
-import prisma from '../lib/prisma';
-import { userEditSchema, userFollowerSchema, UserEditInput, UserFollowerInput } from './constrollersSchema';
-import { StatusCode } from '../constants/statusCode';
-import ApiError from '../utils/api-error';
-import ApiResponse from '../utils/api-response';
+import prisma from '../lib/prisma.js';
+import { userEditSchema, userFollowerSchema, UserEditInput, UserFollowerInput } from './constrollersSchema.js';
+import { StatusCode } from '../constants/statusCode.js';
+import ApiError from '../utils/api-error.js';
+import ApiResponse from '../utils/api-response.js';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import {
   userProfileSelect,
@@ -26,7 +26,7 @@ import {
   UserSummaryResponse,
   FollowResponse,
   AuthenticatedRequest 
-} from './types/user.type';
+} from './types/user.type.js';
 
 @Route('user')
 @Tags('User')

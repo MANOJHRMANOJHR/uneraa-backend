@@ -1,5 +1,5 @@
 import axios from 'axios';
-import transporter from './transporter';
+import transporter from './transporter.js';
 // funtion tosend error to discord webhook
 export const sendErrorToDiscord = async (errorInfo) => {
     if (!process.env.DISCORD_WEBHOOK_URL)

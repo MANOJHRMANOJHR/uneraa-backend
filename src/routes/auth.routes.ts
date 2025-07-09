@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import passport from '../config/passport';
-import { generateToken } from '../utils/jwt-token';
+import passport from '../config/passport.js';
+import { generateToken } from '../utils/jwt-token.js';
 
 const authRouter: Router = Router();
 

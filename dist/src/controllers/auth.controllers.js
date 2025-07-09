@@ -11,15 +11,15 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { Controller, Post, Route, Tags, Request, Security, Response, UploadedFiles } from 'tsoa';
-import prisma from '../lib/prisma';
+import prisma from '../lib/prisma.js';
 import bcrypt from 'bcrypt';
-import { uploadOnCloudinary } from '../utils/cloudinary';
-import { generateToken } from '../utils/jwt-token';
-import { userLoginSchema, userRegisterSchema } from './constrollersSchema';
-import ApiError from '../utils/api-error';
-import ApiResponse from '../utils/api-response';
-import { StatusCode } from '../constants/statusCode';
-import { getUniqueUserName } from '../utils/uniqueUserName';
+import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import { generateToken } from '../utils/jwt-token.js';
+import { userLoginSchema, userRegisterSchema } from './constrollersSchema.js';
+import ApiError from '../utils/api-error.js';
+import ApiResponse from '../utils/api-response.js';
+import { StatusCode } from '../constants/statusCode.js';
+import { getUniqueUserName } from '../utils/uniqueUserName.js';
 let AuthController = class AuthController extends Controller {
     secure = process.env.ENVIRONMENT !== 'development';
     /**

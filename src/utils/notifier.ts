@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer'
 import axios from 'axios'
-import { AsyncHandler } from './async-handler'
-import transporter from './transporter'
+import { AsyncHandler } from './async-handler.js'
+import transporter from './transporter.js'
 
 // funtion tosend error to discord webhook
 export const sendErrorToDiscord = async (errorInfo: any) => {

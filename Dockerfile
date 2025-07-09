@@ -19,9 +19,6 @@ RUN npx prisma generate
 # Copy all source code
 COPY . .
 
-# Clean dist folder if it exists
-RUN rm -rf dist
-
 # Build the app (if you have a build step)
 RUN npm run build
 
