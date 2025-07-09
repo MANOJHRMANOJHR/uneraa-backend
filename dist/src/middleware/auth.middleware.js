@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { StatusCode } from '../constants/statusCode.js';
-import ApiError from '../utils/api-error.js';
-import prisma from '../lib/prisma.js';
+import { StatusCode } from '../constants/statusCode';
+import ApiError from '../utils/api-error';
+import prisma from '../lib/prisma';
 const TOKEN_SECRET = process.env.JWT_SECRET || '';
 export async function authorizeUser(req, name, _scheme, res, next) {
     try {

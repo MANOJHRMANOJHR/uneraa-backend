@@ -1,5 +1,5 @@
-import prisma from '../lib/prisma.js';
-import emitter from '../utils/emitter.js';
+import prisma from '../lib/prisma';
+import emitter from '../utils/emitter';
 emitter.on('PostPublished', async (post) => {
     const followers = await prisma.follow.findMany({
         where: { followingId: post.authorId },

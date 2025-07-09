@@ -11,13 +11,13 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { Controller, Get, Route, Tags, Patch, Delete, Body, Path, Query, Security, Request, Post, Response, } from 'tsoa';
-import prisma from '../lib/prisma.js';
-import { userEditSchema, userFollowerSchema } from './constrollersSchema.js';
-import { StatusCode } from '../constants/statusCode.js';
-import ApiError from '../utils/api-error.js';
-import ApiResponse from '../utils/api-response.js';
+import prisma from '../lib/prisma';
+import { userEditSchema, userFollowerSchema } from './constrollersSchema';
+import { StatusCode } from '../constants/statusCode';
+import ApiError from '../utils/api-error';
+import ApiResponse from '../utils/api-response';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { userProfileSelect, userSummarySelect } from './types/user.type.js';
+import { userProfileSelect, userSummarySelect } from './types/user.type';
 let UserController = class UserController extends Controller {
     /**
      * Update user profile

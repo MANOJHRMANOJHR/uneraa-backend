@@ -80,8 +80,8 @@ model Post {
   comments    Comment[]  @relation("PostComments")
   savedBy     User[]     @relation("UserSavedPosts")
   tags        Tag[]      @relation("PostTags")
-  categoryId String?                  
-  category   Category? @relation("PostCategory", fields: [categoryId], references: [id])
+  categoryId  String?
+  category    Category?  @relation("PostCategory", fields: [categoryId], references: [id])
   bookmarks   Bookmark[] @relation("PostBookmarks")
   draft       Boolean    @default(true)
 }

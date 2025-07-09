@@ -1,7 +1,7 @@
 import { Queue, Worker } from 'bullmq';
-import prisma from '../../lib/prisma.js';
-import emitter from '../emitter.js';
-import redis from '../redis.js';
+import prisma from '../../lib/prisma';
+import emitter from '../emitter';
+import redis from '../redis';
 const connection = redis();
 export const postQueue = new Queue('postQueue', { connection });
 // Worker to process scheduled posts

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import passport from '../config/passport.js';
-import { generateToken } from '../utils/jwt-token.js';
+import passport from '../config/passport';
+import { generateToken } from '../utils/jwt-token';
 const authRouter = Router();
 const secureEnvironment = process.env.ENVIRONMENT !== 'development';
 const frontendRedirectUrl = process.env.FRONTEND_REDIRECT_URL || 'http://localhost:3000/@me';

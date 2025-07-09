@@ -1,5 +1,5 @@
-import { StatusCode } from '../constants/statusCode.js';
-import ApiResponce from '../utils/api-response.js';
+import { StatusCode } from '../constants/statusCode';
+import ApiResponce from '../utils/api-response';
 export const globalErrorHandler = async (err, req, res, _next) => {
     const statusCode = err.statusCode || StatusCode.INTERNAL_SERVER_ERROR;
     const message = err.message || 'Something went wrong';

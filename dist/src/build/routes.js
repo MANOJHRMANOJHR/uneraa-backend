@@ -1,11 +1,11 @@
-import { authorizeUser } from '../middleware/auth.middleware.js';
+import { authorizeUser } from '../middleware/auth.middleware';
 import { fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from '../controllers/user.controller.js';
+import { UserController } from '../controllers/user.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { PostController } from '../controllers/post.controllers.js';
+import { PostController } from '../controllers/post.controllers';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { AuthController } from '../controllers/auth.controllers.js';
+import { AuthController } from '../controllers/auth.controllers';
 import multer from 'multer';
 const expressAuthenticationRecasted = authorizeUser;
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

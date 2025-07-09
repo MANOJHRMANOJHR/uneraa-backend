@@ -11,14 +11,14 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { Controller, Post, Get, Delete, Patch, Route, Tags, Security, Request, Response, Body, Path, Query, UploadedFiles, FormField } from 'tsoa';
-import prisma from '../lib/prisma.js';
+import prisma from '../lib/prisma';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { EmojiType } from './constrollersSchema.js';
-import ApiResponse from '../utils/api-response.js';
-import ApiError from '../utils/api-error.js';
-import { uploadOnCloudinary } from '../utils/cloudinary.js';
-import { StatusCode } from '../constants/statusCode.js';
-import { postQueue } from '../utils/jobs/postQueue.js';
+import { EmojiType } from './constrollersSchema';
+import ApiResponse from '../utils/api-response';
+import ApiError from '../utils/api-error';
+import { uploadOnCloudinary } from '../utils/cloudinary';
+import { StatusCode } from '../constants/statusCode';
+import { postQueue } from '../utils/jobs/postQueue';
 let PostController = class PostController extends Controller {
     /**
      * Create a new post
