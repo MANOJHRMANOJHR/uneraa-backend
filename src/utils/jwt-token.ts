@@ -1,5 +1,4 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
-import { User } from '../../generated/prisma';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRY = process.env.JWT_EXPIRY!;
