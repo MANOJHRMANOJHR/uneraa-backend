@@ -4,20 +4,35 @@ import emitter from '../emitter.js';
 import redis from '../redis.js';
 const connection = redis();
 export const postQueue = new Queue('postQueue', { connection });
-// Worker to process scheduled posts
-new Worker('postQueue', async (job) => {
-    const { postId } = job.data;
-    const post = await prisma.post.findUnique({ where: { id: postId } });
-    if (post && !post.published) {
-        await prisma.post.update({
-            where: { id: postId },
-            data: {
-                published: true,
-                publishedAt: new Date(),
-            },
-        });
-        console.log(`Scheduled post published: ${post.title}`);
-        // Emit event to notify followers
-        emitter.emit('PostPublished', post);
+const worker = new Worker('postQueue', async (job) => {
+    try {
+        const { postId } = job.data;
+        const post = await prisma.post.findUnique({ where: { id: postId } });
+        if (post && !post.published) {
+            await prisma.post.update({
+                where: { id: postId },
+                data: {
+                    published: true,
+                    publishedAt: new Date(),
+                },
+            });
+            console.log(`✅ Scheduled post published: ${post.title}`);
+            emitter.emit('PostPublished', post);
+        }
     }
-}, { connection });
+    catch (err) {
+        // ✅ Handle Upstash limit exceeded error
+        if (err?.toString()?.includes('ERR max requests limit exceeded')) {
+            console.error('🛑 Upstash Redis request limit exceeded. Pausing worker...');
+            await worker.pause(); // 🔴 Automatically pause worker
+            return;
+        }
+        console.error('❌ Job failed:', err);
+    }
+}, {
+    connection,
+    limiter: {
+        max: 1, // 🔄 1 job
+        duration: 60000 // ⏱️ per 1 min
+    },
+});

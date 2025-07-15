@@ -7,7 +7,7 @@ import { globalErrorHandler } from './src/middleware/globalError.js';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import { RegisterRoutes } from './src/build/routes.js';
-import swaggerDocument from './src/docs/swagger.json' assert { type: 'json' };
+import swaggerDocument from './src/docs/swagger.json' with { type: 'json' };
 
 import cors from 'cors';
 

@@ -30,7 +30,6 @@ const worker = new Worker(
     } catch (err) {
       // ✅ Handle Upstash limit exceeded error
       if (
-        err?.message?.includes('max requests limit exceeded') ||
         err?.toString()?.includes('ERR max requests limit exceeded')
       ) {
         console.error('🛑 Upstash Redis request limit exceeded. Pausing worker...');
