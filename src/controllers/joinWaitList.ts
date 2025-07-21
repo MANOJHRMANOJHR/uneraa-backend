@@ -27,7 +27,6 @@ export class JoinWaitListController {
     @Body() body: { name: string; email: string }
   ): Promise<ApiResponse<string>> {
     const validation = userJoinWaitListSchema.safeParse(body);
-
     if (!validation.success) {
       throw new ApiError(
         StatusCode.BAD_REQUEST,
@@ -37,7 +36,6 @@ export class JoinWaitListController {
     }
 
     const { name, email } = validation.data;
-
     try {
       // Check for duplicate entry
       const existing = await prisma.joinWaitlist.findUnique({
@@ -59,25 +57,27 @@ export class JoinWaitListController {
         ''
       );
     } catch (error) {
-      this.handlePrismaError(error);
+      return this.handlePrismaError(error);
     }
   }
 
-  private handlePrismaError(error: unknown): never {
-    if (error instanceof PrismaClientKnownRequestError) {
-      throw new ApiError(
-        StatusCode.INTERNAL_SERVER_ERROR,
-        'Database error',
-        [error.message]
-      );
-    }
-
-    if (error instanceof ApiError) throw error;
-
-    throw new ApiError(
+  private handlePrismaError(error: unknown): ApiResponse<string> {
+  if (error instanceof PrismaClientKnownRequestError) {
+    return new ApiResponse(
       StatusCode.INTERNAL_SERVER_ERROR,
-      'Internal server error',
-      error instanceof Error ? [error.message] : []
+      false,
+      'Database error',
+      error.message
     );
   }
+
+  if (error instanceof ApiError) throw error;
+
+  return new ApiResponse(
+    StatusCode.INTERNAL_SERVER_ERROR,
+    false,
+    'Internal server error',
+    error instanceof Error ? error.message : ''
+  );
+}
 }
