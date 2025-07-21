@@ -19,6 +19,11 @@ enum Role {
   USER
 }
 
+model JoinWaitlist {
+  name String
+  email String @unique
+}
+
 model User {
   id             String     @id @default(cuid())
   name           String

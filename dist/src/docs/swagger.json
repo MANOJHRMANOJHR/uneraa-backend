@@ -367,6 +367,32 @@
                     "content"
                 ],
                 "type": "object"
+            },
+            "ApiResponse_string_": {
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "status": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "required": [
+                    "statusCode",
+                    "status",
+                    "message",
+                    "data"
+                ],
+                "type": "object",
+                "additionalProperties": false
             }
         },
         "securitySchemes": {}
@@ -680,16 +706,6 @@
                                 }
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Validation failed",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
                     }
                 },
                 "description": "Create a new post",
@@ -770,19 +786,8 @@
                                 }
                             }
                         }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
                     }
                 },
-                "description": "Get posts with pagination",
                 "tags": [
                     "Post"
                 ],
@@ -824,29 +829,8 @@
                                 }
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Post not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
                     }
                 },
-                "description": "Delete a post",
                 "tags": [
                     "Post"
                 ],
@@ -878,19 +862,8 @@
                                 }
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Validation failed",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
                     }
                 },
-                "description": "Update a post",
                 "tags": [
                     "Post"
                 ],
@@ -967,19 +940,8 @@
                                 }
                             }
                         }
-                    },
-                    "404": {
-                        "description": "Post not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
                     }
                 },
-                "description": "Get likes for a post",
                 "tags": [
                     "Post"
                 ],
@@ -1009,39 +971,8 @@
                                 }
                             }
                         }
-                    },
-                    "400": {
-                        "description": "Invalid emoji type",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Post not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
                     }
                 },
-                "description": "Toggle like/reaction on a post",
                 "tags": [
                     "Post"
                 ],
@@ -1085,29 +1016,8 @@
                                 }
                             }
                         }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Post not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
                     }
                 },
-                "description": "Create a comment on a post",
                 "tags": [
                     "Post"
                 ],
@@ -1132,6 +1042,83 @@
                         "application/json": {
                             "schema": {
                                 "$ref": "#/components/schemas/CommentInput"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/join-waitlist/submit": {
+            "post": {
+                "operationId": "SubmitWaitListForm",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_string_"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Email already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Submit the join waitlist form",
+                "tags": [
+                    "JoinWaitList"
+                ],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "description": "- Contains name and email",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "name"
+                                ],
+                                "type": "object",
+                                "description": "- Contains name and email"
                             }
                         }
                     }

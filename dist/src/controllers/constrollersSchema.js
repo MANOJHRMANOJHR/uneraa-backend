@@ -39,6 +39,10 @@ export const commentSchema = z.object({
     authorId: z.string(),
     parentId: z.string().optional(),
 });
+export const userJoinWaitListSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email address'),
+});
 export const userEditSchema = z.object({
     name: z.string().min(2).max(20).optional(),
     email: z.string().email().optional(),

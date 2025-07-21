@@ -6,6 +6,7 @@ import { UserController } from '../controllers/user.controller.js';
 import { PostController } from '../controllers/post.controllers.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { AuthController } from '../controllers/auth.controllers.js';
+import { JoinWaitListController } from '../controllers/joinWaitList.js';
 import multer from 'multer';
 const expressAuthenticationRecasted = authorizeUser;
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -115,6 +116,17 @@ const models = {
     "CommentInput": {
         "dataType": "refAlias",
         "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "parentId": { "dataType": "string" }, "authorId": { "dataType": "string", "required": true }, "postId": { "dataType": "string", "required": true }, "content": { "dataType": "string", "required": true } }, "validators": {} },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse_string_": {
+        "dataType": "refObject",
+        "properties": {
+            "statusCode": { "dataType": "double", "required": true },
+            "status": { "dataType": "boolean", "required": true },
+            "message": { "dataType": "string", "required": true },
+            "data": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true },
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -429,6 +441,29 @@ export function RegisterRoutes(app, opts) {
             const controller = new PostController();
             await templateService.apiHandler({
                 methodName: 'createComment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsJoinWaitListController_submitWaitListForm = {
+        body: { "in": "body", "name": "body", "required": true, "dataType": "nestedObjectLiteral", "nestedProperties": { "email": { "dataType": "string", "required": true }, "name": { "dataType": "string", "required": true } } },
+    };
+    app.post('/api/v1/join-waitlist/submit', ...(fetchMiddlewares(JoinWaitListController)), ...(fetchMiddlewares(JoinWaitListController.prototype.submitWaitListForm)), async function JoinWaitListController_submitWaitListForm(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsJoinWaitListController_submitWaitListForm, request, response });
+            const controller = new JoinWaitListController();
+            await templateService.apiHandler({
+                methodName: 'submitWaitListForm',
                 controller,
                 response,
                 next,

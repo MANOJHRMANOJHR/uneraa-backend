@@ -23,7 +23,7 @@ import ApiResponse from '../utils/api-response.js';
 import ApiError from '../utils/api-error.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { StatusCode } from '../constants/statusCode.js';
-import { postQueue } from '../utils/jobs/postQueue.js';
+// import { postQueue } from '../utils/jobs/postQueue.js';
 import { AuthenticatedRequest } from './types/user.type.js';
 
 @Route('post')
@@ -82,13 +82,13 @@ export class PostController extends Controller {
     try {
       const post = await prisma.post.create({ data });
 
-      if (!isPublished && publishedAt && new Date(publishedAt) > new Date()) {
-        await postQueue.add(
-          'publishPost',
-          { postId: post.id },
-          { delay: new Date(publishedAt).getTime() - Date.now() }
-        );
-      }
+      // if (!isPublished && publishedAt && new Date(publishedAt) > new Date()) {
+      //   await postQueue.add(
+      //     'publishPost',
+      //     { postId: post.id },
+      //     { delay: new Date(publishedAt).getTime() - Date.now() }
+      //   );
+      // }
 
       return new ApiResponse(StatusCode.CREATED, true, 'Post created', post);
     } catch (error) {
