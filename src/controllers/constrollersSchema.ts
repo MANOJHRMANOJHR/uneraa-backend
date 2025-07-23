@@ -34,6 +34,22 @@ export const userPostSchema = z.object({
   publishedAt: z.string().optional(),
 });
 
+export const emojiInputSchema = z.object({
+  emoji: z.nativeEnum(EmojiType),
+});
+
+export const commentSchema = z.object({
+  content: z.string().min(1).max(1000),
+  postId: z.string(),
+  authorId: z.string(),
+  parentId: z.string().optional(),
+});
+
+export const userJoinWaitListSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+});
+
 export const userEditSchema = z.object({
   name: z.string().min(2).max(20).optional(),
   email: z.string().email().optional(),
@@ -46,3 +62,37 @@ export const userFollowerSchema = z.object({
   followingId: z.string(),
   followerId: z.string(),
 });
+
+export type UserEditInput = {
+  name?: string;
+  email?: string;
+  bio?: string;
+  username?: string;
+  portfolioLink?: string;
+};
+
+export type UserFollowerInput ={
+  followingId: string;
+  followerId: string;
+}
+
+export type UserPostInput = {
+  title: string;
+  content: string;
+  categoryId: string;
+  tags: string[];
+  image: string;
+  video: string;
+  published: boolean;
+  publishedAt: string;
+  authorId: string;
+}
+export type EmojiInput = {
+  emoji: EmojiType;
+}
+export type CommentInput = {
+  content: string;
+  postId: string;
+  authorId: string;
+  parentId?: string;
+}

@@ -4,6 +4,10 @@
     "module": "ESNext",
     "target": "ESNext",
     "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
@@ -11,6 +15,6 @@
     "rootDir": "./",
     "types": ["node", "express"]
   },
-  "include": ["**/*.ts", "src/config/passport.ts"],
+  "include": ["**/*.ts", "src/**/*.ts", "src/**/*.json"],
   "exclude": ["node_modules", "dist"]
 }

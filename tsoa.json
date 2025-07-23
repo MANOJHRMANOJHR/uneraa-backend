@@ -1,0 +1,19 @@
+{
+  "entryFile": "server.ts",
+  "authenticationModule": "./middleware/auth.middleware",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/controllers/*.ts"],
+  "spec": {
+    "outputDirectory": "src/docs",
+    "specVersion": 3,
+    "basePath": "/api/v1",
+    "name": "UNNERA API",
+    "version": "1.0.0",
+    "description": "API Docs for UNERRA"
+  },
+  "routes": {
+    "routesDir": "./src/build",
+    "basePath": "/api/v1"
+
+  }
+}

@@ -1,16 +1,14 @@
 import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
-import { StatusCode } from '../constants/statusCode';
-import ApiError from '../utils/api-error';
-import prisma from '../lib/prisma';
+import { StatusCode } from '../constants/statusCode.js';
+import ApiError from '../utils/api-error.js';
+import prisma from '../lib/prisma.js';
 
 const TOKEN_SECRET = process.env.JWT_SECRET || '';
 
 export async function authorizeUser(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+req: Request, name: string,
+  _scheme: unknown, res: Response, next: NextFunction) {
   try {
     const tokenArr = req.headers.authorization?.split(' ');
 

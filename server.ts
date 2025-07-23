@@ -2,25 +2,22 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import swaggerUi from 'swagger-ui-express';
-import YAML from 'yamljs';
-import authRouter from './src/routes/auth.routes';
-import { globalErrorHandler } from './src/middleware/globalError';
+import authRouter from './src/routes/auth.routes.js';
+import { globalErrorHandler } from './src/middleware/globalError.js';
 import bodyParser from 'body-parser';
 import passport from 'passport';
-import postRouter from './src/routes/post.routes';
-import userRouter from './src/routes/user.routes';
+import { RegisterRoutes } from './src/build/routes.js';
+import swaggerDocument from './src/docs/swagger.json' with { type: 'json' };
+
 import cors from 'cors';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Load Swagger YAML file
-const swaggerDocument = YAML.load('./src/swaggerAPI/swagger.yml');
-
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000', // Adjust this to your frontend URL  
     credentials: true,
   })
 );
@@ -31,13 +28,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Serve Swagger API documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+// ✅ TSOA-generated routes
+RegisterRoutes(app); 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/post', postRouter);
-app.use('/api/v1/user', userRouter);
 app.get('/', (req, res) => {
-  res.send('Hello chetas!');
+  res.send('Hello UNERRA!');
 });
 
 app.use(
@@ -51,6 +48,9 @@ app.use(
   }
 );
 
+
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log('swagger docs available at http://localhost:8080/api/v1/docs');
 });

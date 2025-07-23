@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  // output   = "../generated/prisma"
 }
 
 datasource db {
@@ -17,6 +17,12 @@ datasource db {
 enum Role {
   ADMIN
   USER
+}
+
+model JoinWaitlist {
+  id    Int    @id @default(autoincrement())
+  name  String
+  email String @unique
 }
 
 model User {
@@ -34,8 +40,8 @@ model User {
   posts          Post[]     @relation("CreatedPosts")
   comments       Comment[]  @relation("UserComment")
   likes          Like[]     @relation("UserLikes")
-  followers      User[]     @relation("UserFollows")
-  following      User[]     @relation("UserFollows")
+  followers      Follow[]   @relation("followingRelation")
+  following      Follow[]   @relation("followersRelation")
   savedPosts     Post[]     @relation("UserSavedPosts")
   bookmarks      Bookmark[] @relation("UserBookmarks")
   blockedUsers   Block[]    @relation("userBlocked")
@@ -73,17 +79,17 @@ model Post {
   embedUrl    String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  published   Boolean    @default(true)
+  published   Boolean    @default(false)
   publishedAt DateTime?
   views       Int        @default(0)
   likes       Like[]     @relation("PostLikes")
   comments    Comment[]  @relation("PostComments")
   savedBy     User[]     @relation("UserSavedPosts")
   tags        Tag[]      @relation("PostTags")
-  category    Category   @relation("PostCategory", fields: [categoryId], references: [id])
-  categoryId  String
+  categoryId String?                  
+  category   Category? @relation("PostCategory", fields: [categoryId], references: [id])
   bookmarks   Bookmark[] @relation("PostBookmarks")
-  draft       Boolean    @default(false)
+  draft       Boolean    @default(true)
 }
 
 model Comment {
@@ -139,3 +145,14 @@ model Bookmark {
 //   read      Boolean  @default(false)
 //   createdAt DateTime @default(now())
 // }
+
+model Follow {
+  id          String   @id @default(cuid())
+  follower    User     @relation("followersRelation", fields: [followerId], references: [id])
+  followerId  String
+  following   User     @relation("followingRelation", fields: [followingId], references: [id])
+  followingId String
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}

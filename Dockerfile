@@ -10,6 +10,12 @@ COPY package.json ./
 # Install dependencies
 RUN npm install
 
+# Copy Prisma schema (must be copied before generate)
+COPY prisma ./prisma
+
+# Generate Prisma Client inside Docker
+RUN npx prisma generate
+
 # Copy all source code
 COPY . .
 

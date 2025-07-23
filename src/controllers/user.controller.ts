@@ -1,386 +1,298 @@
-import prisma from '../lib/prisma';
-import { Request, Response } from 'express';
-import { userEditSchema, userFollowerSchema } from './constrollersSchema';
-import { StatusCode } from '../constants/statusCode';
-import ApiError from '../utils/api-error';
-import ApiResponse from '../utils/api-response';
+import {
+  Controller,
+  Get,
+  Route,
+  Tags,
+  Patch,
+  Delete,
+  Body,
+  Path,
+  Query,
+  Security,
+  Request,
+  Post,
+  Response,
+} from 'tsoa';
+import prisma from '../lib/prisma.js';
+import { userEditSchema, userFollowerSchema, UserEditInput, UserFollowerInput } from './constrollersSchema.js';
+import { StatusCode } from '../constants/statusCode.js';
+import ApiError from '../utils/api-error.js';
+import ApiResponse from '../utils/api-response.js';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import {
+  userProfileSelect,
+  userSummarySelect,
+  UserProfileResponse,
+  UserSummaryResponse,
+  FollowResponse,
+  AuthenticatedRequest 
+} from './types/user.type.js';
 
-declare global {
-  namespace Express {
-    interface User {
-      email?: string;
+@Route('user')
+@Tags('User')
+export class UserController extends Controller {
+  /**
+   * Update user profile
+   */
+  @Patch('update')
+  @Security('jwt')
+  @Response<ApiError>(StatusCode.UNAUTHORIZED, 'Unauthorized')
+  @Response<ApiError>(StatusCode.BAD_REQUEST, 'Validation failed')
+  @Response<ApiError>(StatusCode.CONFLICT, 'Email or username already exists')
+  @Response<ApiError>(StatusCode.NOT_FOUND, 'User not found')
+  public async updateUserProfile(
+    @Request() req: AuthenticatedRequest,
+    @Body() body: UserEditInput
+  ): Promise<ApiResponse<UserProfileResponse>> {
+    const currentUserId = req.user?.id;
+    if (!currentUserId) {
+      throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
     }
-  }
-}
 
-const updateUserProfileData = async (req: Request, res: Response) => {
-  try {
-    const userEmail = req.user?.email;
-    const { success, data, error } = userEditSchema.safeParse(req.body);
-    if (success) {
-      const { name, bio, email, portfolioLink, username } = data;
+    const validationResult = userEditSchema.safeParse(body);
+    if (!validationResult.success) {
+      throw new ApiError(
+        StatusCode.BAD_REQUEST,
+        'Validation failed',
+        validationResult.error.errors
+      );
+    }
 
-      if (email) {
-        const existingEmail = await prisma.user.findFirst({
-          where: {
-            email,
-          },
-        });
+    const data = validationResult.data;
+    const { name, bio, email, portfolioLink, username } = data;
 
-        if (existingEmail) {
-          res
-            .status(StatusCode.CONFLICT)
-            .json(new ApiError(StatusCode.CONFLICT, 'Email already exist'));
-          return;
-        }
+    try {
+      const [currentUser, existingEmail, existingUsername] = await Promise.all([
+        prisma.user.findUnique({
+          where: { id: currentUserId },
+          select: { email: true, username: true },
+        }),
+        email && email !== req.user?.email
+          ? prisma.user.findUnique({ where: { email } })
+          : null,
+        username
+          ? prisma.user.findFirst({
+              where: { username, NOT: { id: currentUserId } },
+            })
+          : null,
+      ]);
+
+      if (!currentUser) {
+        throw new ApiError(StatusCode.NOT_FOUND, 'User not found');
       }
 
-      if (username) {
-        const existingUsername = await prisma.user.findFirst({
-          where: {
-            username,
-          },
-        });
+      if (email && existingEmail) {
+        throw new ApiError(StatusCode.CONFLICT, 'Email already exists');
+      }
 
-        if (existingUsername) {
-          res
-            .status(StatusCode.CONFLICT)
-            .json(new ApiError(StatusCode.CONFLICT, 'Username already exist'));
-          return;
-        }
+      if (username && existingUsername) {
+        throw new ApiError(StatusCode.CONFLICT, 'Username already exists');
       }
 
       const updatedUser = await prisma.user.update({
-        where: {
-          email: userEmail,
-        },
-        data: {
-          name,
-          bio,
-          email,
-          portfolioLink,
-        },
+        where: { id: currentUserId },
+        data: { name, bio, email, portfolioLink, username },
+        select: userProfileSelect,
       });
 
-      if (!updatedUser) {
-        res
-          .status(StatusCode.INTERNAL_SERVER_ERROR)
-          .json(
-            new ApiError(
-              StatusCode.INTERNAL_SERVER_ERROR,
-              'Failed to update data'
-            )
-          );
-        return;
+      return new ApiResponse(
+        StatusCode.OK,
+        true,
+        'User updated successfully',
+        updatedUser as UserProfileResponse
+      );
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
+  }
+
+  /**
+   * Get user by ID
+   */
+  @Get('{userId}')
+  @Response<ApiError>(StatusCode.NOT_FOUND, 'User not found')
+  public async getUserById(
+    @Path() userId: string
+  ): Promise<ApiResponse<UserProfileResponse>> {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: userProfileSelect,
+      });
+
+      if (!user) {
+        throw new ApiError(StatusCode.NOT_FOUND, 'User not found');
       }
 
-      res
-        .status(StatusCode.OK)
-        .json(
-          new ApiResponse(
-            StatusCode.OK,
-            true,
-            'Data updated successfully',
-            updatedUser
-          )
-        );
-      return;
-    } else {
-      res
-        .status(StatusCode.BAD_REQUEST)
-        .json(
-          new ApiError(StatusCode.BAD_REQUEST, 'Data validation failed', [
-            error,
-          ])
-        );
-      return;
-    }
-  } catch (error) {
-    res
-      .status(StatusCode.INTERNAL_SERVER_ERROR)
-      .json(
-        new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Server error', [error])
+      return new ApiResponse(
+        StatusCode.OK,
+        true,
+        'User fetched successfully',
+        user as UserProfileResponse
       );
-    return;
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
   }
-};
 
-const getUserById = async (req: Request, res: Response) => {
-  try {
-    const userId = req.params.id;
-
-    const ExistingUser = await prisma.user.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!ExistingUser) {
-      res
-        .status(StatusCode.NOT_FOUND)
-        .json(new ApiError(StatusCode.NOT_FOUND, 'User not found'));
-      return;
+  /**
+   * Delete user
+   */
+  @Delete('{userId}')
+  @Security('jwt')
+  @Response<ApiError>(StatusCode.UNAUTHORIZED, 'Unauthorized')
+  @Response<ApiError>(StatusCode.NOT_FOUND, 'User not found')
+  public async deleteUser(
+    @Request() req: AuthenticatedRequest,
+    @Path() userId: string
+  ): Promise<ApiResponse<{}>> {
+    if (req.user?.id !== userId) {
+      throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
     }
 
-    res
-      .status(StatusCode.OK)
-      .json(
-        new ApiResponse(
-          StatusCode.OK,
-          true,
-          'User fetched successfully',
-          ExistingUser
-        )
+    try {
+      await prisma.user.delete({ where: { id: userId } });
+      return new ApiResponse(
+        StatusCode.NO_CONTENT,
+        true,
+        'User deleted successfully',
+        {}
       );
-    return;
-  } catch (error) {
-    res
-      .status(StatusCode.INTERNAL_SERVER_ERROR)
-      .json(
-        new ApiError(
-          StatusCode.INTERNAL_SERVER_ERROR,
-          'Server error while fetching user',
-          [error]
-        )
-      );
-    return;
-  }
-};
-
-const deleteUser = async (req: Request, res: Response) => {
-  try {
-    const userId = req.params.id;
-
-    const ExistingUser = await prisma.user.findFirst({
-      where: {
-        id: userId,
-      },
-    });
-
-    if (!ExistingUser) {
-      res
-        .status(StatusCode.NOT_FOUND)
-        .json(new ApiError(StatusCode.NOT_FOUND, 'User not found'));
-      return;
+    } catch (error) {
+      this.handlePrismaError(error);
     }
-
-    const deletedUser = await prisma.user.delete({
-      where: {
-        id: userId,
-      },
-    });
-
-    res
-      .status(StatusCode.NO_CONTENT)
-      .json(
-        new ApiResponse(
-          StatusCode.NO_CONTENT,
-          true,
-          'User Deleted successfully',
-          ExistingUser
-        )
-      );
-    return;
-  } catch (error) {
-    res
-      .status(StatusCode.INTERNAL_SERVER_ERROR)
-      .json(
-        new ApiError(
-          StatusCode.INTERNAL_SERVER_ERROR,
-          'Server error while delete operation',
-          [error]
-        )
-      );
-    return;
   }
-};
 
-const getUsers = async (req: Request, res: Response) => {
-  try {
-    const limit = parseInt(req.params.limit) || 10;
-    const skip = parseInt(req.params.skip) || 0;
-
-    const Users = await prisma.user.findMany({
-      where: {
-        isObsolete: false,
-      },
-      select: {
-        id: true,
-        username: true,
-        name: true,
-        email: true,
-        profileImgUrl: true,
-        coverImgUrl: true,
-        bio: true,
-        techStack: true,
-      },
-      take: limit,
-      skip: skip,
-    });
-
-    res
-      .status(StatusCode.OK)
-      .json(
-        new ApiResponse(
-          StatusCode.OK,
-          true,
-          'Users fetched successfully',
-          Users
-        )
-      );
-    return;
-  } catch (error) {
-    res
-      .status(StatusCode.INTERNAL_SERVER_ERROR)
-      .json(
-        new ApiError(
-          StatusCode.INTERNAL_SERVER_ERROR,
-          'Internal server error',
-          [error]
-        )
-      );
-    return;
-  }
-};
-
-//follow and unfollow operation handled in single route automatically
-const followUser = async (req: Request, res: Response) => {
-  try {
-    const { success, data, error } = userFollowerSchema.safeParse(req.body);
-
-    if (error) {
-      res
-        .status(StatusCode.BAD_REQUEST)
-        .json(
-          new ApiError(StatusCode.BAD_REQUEST, 'Input validation failed', [
-            error,
-          ])
-        );
-      return;
-    }
-
-    if (success && data) {
-      const { followerId, followingId } = data;
-
-      const follower = await prisma.user.findUnique({
-        where: {
-          id: followerId,
-        },
-        include: {
-          followers: true,
-          following: true,
-        },
+  /**
+   * Get users with pagination
+   */
+  @Get()
+  public async getUsers(
+    @Query() limit: number = 10,
+    @Query() skip: number = 0
+  ): Promise<ApiResponse<UserSummaryResponse[]>> {
+    try {
+      const users = await prisma.user.findMany({
+        where: { isObsolete: false },
+        select: userSummarySelect,
+        take: limit,
+        skip: skip,
       });
 
-      if (!follower) {
-        res
-          .status(StatusCode.NOT_FOUND)
-          .json(new ApiError(StatusCode.NOT_FOUND, 'Not a valid user'));
-        return;
+      return new ApiResponse(
+        StatusCode.OK,
+        true,
+        'Users fetched successfully',
+        users as UserSummaryResponse[]
+      );
+    } catch (error) {
+      throw new ApiError(
+        StatusCode.INTERNAL_SERVER_ERROR,
+        'Internal server error',
+        error instanceof Error ? [error.message] : []
+      );
+    }
+  }
+
+  /**
+   * Follow or unfollow a user
+   */
+  @Post('follow')
+  @Security('jwt')
+  @Response<ApiError>(StatusCode.UNAUTHORIZED, 'Unauthorized')
+  @Response<ApiError>(StatusCode.BAD_REQUEST, 'Validation failed')
+  @Response<ApiError>(StatusCode.NOT_FOUND, 'User not found')
+  public async followUser(
+    @Request() req: AuthenticatedRequest,
+    @Body() body: UserFollowerInput
+  ): Promise<ApiResponse<FollowResponse>> {
+    const currentUserId = req.user?.id;
+    if (!currentUserId) {
+      throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
+    }
+
+    const validationResult = userFollowerSchema.safeParse(body);
+    if (!validationResult.success) {
+      throw new ApiError(
+        StatusCode.BAD_REQUEST,
+        'Validation failed',
+        validationResult.error.errors
+      );
+    }
+
+    const { followingId } = validationResult.data;
+    const followerId = currentUserId;
+
+    try {
+      // Check if users exist in single query
+      const usersExist = await prisma.user.count({
+        where: { OR: [{ id: followerId }, { id: followingId }] },
+      });
+
+      if (usersExist !== 2) {
+        throw new ApiError(StatusCode.NOT_FOUND, 'User not found');
       }
 
-      const alreadyFollwing = await prisma.user.findFirst({
+      // Check existing follow relationship
+      const existingFollow = await prisma.follow.findUnique({
         where: {
-          id: followerId,
-          following: {
-            some: {
-              id: followingId,
-            },
-          },
+          followerId_followingId: { followerId, followingId },
         },
       });
 
-      //follow unfollow conditionally in single route
-      if (alreadyFollwing) {
-        const updateFollwerList = await prisma.user.update({
+      let isFollowing: boolean;
+      let message: string;
+
+      if (existingFollow) {
+        await prisma.follow.delete({
           where: {
-            id: followingId,
-          },
-          data: {
-            followers: {
-              disconnect: {
-                id: followerId,
-              },
-            },
+            followerId_followingId: { followerId, followingId },
           },
         });
-
-        const updateFollwingList = await prisma.user.update({
-          where: {
-            id: followerId,
-          },
-          data: {
-            following: {
-              disconnect: { id: followingId },
-            },
-          },
-        });
-
-        res
-          .status(StatusCode.OK)
-          .json(
-            new ApiResponse(
-              StatusCode.OK,
-              true,
-              'Unfollwed user successfully',
-              { updateFollwerList, updateFollwingList }
-            )
-          );
-        return;
+        isFollowing = false;
+        message = 'Unfollowed user successfully';
       } else {
-        const updateFollwerList = await prisma.user.update({
-          where: {
-            id: followingId,
-          },
-          data: {
-            followers: {
-              connect: {
-                id: followerId,
-              },
-            },
-          },
+        await prisma.follow.create({
+          data: { followerId, followingId },
         });
+        isFollowing = true;
+        message = 'Followed user successfully';
+      }
 
-        const updateFollwingList = await prisma.user.update({
-          where: {
-            id: followerId,
-          },
-          data: {
-            following: {
-              connect: {
-                id: followingId,
-              },
-            },
-          },
-        });
+      return new ApiResponse(StatusCode.OK, true, message, {
+        message,
+        isFollowing,
+      });
+    } catch (error) {
+      this.handlePrismaError(error);
+    }
+  }
 
-        res.status(StatusCode.OK).json(
-          new ApiResponse(StatusCode.OK, true, 'Follwed user successfully', {
-            updateFollwerList,
-            updateFollwingList,
-          })
-        );
-        return;
+  /**
+   * Centralized Prisma error handler
+   */
+  private handlePrismaError(error: unknown): never {
+    if (error instanceof PrismaClientKnownRequestError) {
+      switch (error.code) {
+        case 'P2025':
+          throw new ApiError(StatusCode.NOT_FOUND, 'User not found');
+        case 'P2002':
+          throw new ApiError(StatusCode.CONFLICT, 'Database conflict error');
+        default:
+          throw new ApiError(
+            StatusCode.INTERNAL_SERVER_ERROR,
+            'Database error',
+            [error.message]
+          );
       }
     }
-  } catch (error) {
-    res
-      .status(StatusCode.INTERNAL_SERVER_ERROR)
-      .json(
-        new ApiError(
-          StatusCode.INTERNAL_SERVER_ERROR,
-          'Operation failed. Internal server error',
-          [error]
-        )
-      );
-    return;
-  }
-};
 
-export default {
-  updateUserProfileData,
-  getUserById,
-  deleteUser,
-  getUsers,
-  followUser,
-};
+    if (error instanceof ApiError) throw error;
+
+    throw new ApiError(
+      StatusCode.INTERNAL_SERVER_ERROR,
+      'Internal server error',
+      error instanceof Error ? [error.message] : []
+    );
+  }
+}

@@ -1,4 +1,4 @@
-import prisma from "../lib/prisma";
+import prisma from "../lib/prisma.js";
 
 export const  getUniqueUserName = async (email: string) => { 
   const baseName = email.split('@')[0];

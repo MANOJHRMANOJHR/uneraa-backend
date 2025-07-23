@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import ApiError from '../utils/api-error';
-import { sendErrorToDiscord, sendErrorToEmail } from '../utils/notifier';
-import { StatusCode } from '../constants/statusCode';
-import ApiResponce from '../utils/api-response';
+import ApiError from '../utils/api-error.js';
+import { sendErrorToDiscord, sendErrorToEmail } from '../utils/notifier.js';
+import { StatusCode } from '../constants/statusCode.js';
+import ApiResponce from '../utils/api-response.js';
 
 // Extend the Request interface to include the user property
 declare global {
@@ -29,7 +29,6 @@ export const globalErrorHandler = async (
     route: req.originalUrl,
     method: req.method,
     body: req.body, // include form data
-    user: req.user?.email || req.body?.email || 'Guest',
   };
 
   // // Send alerts
