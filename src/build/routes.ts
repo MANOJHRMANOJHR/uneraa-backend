@@ -2,19 +2,22 @@
 /* eslint-disable */
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import type { TsoaRoute } from '@tsoa/runtime';
-import {authorizeUser} from '../middleware/auth.middleware.js';
 import {  fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from '../controllers/user.controller.js';
+import { UserController } from './../controllers/user.controller';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { PostController } from '../controllers/post.controllers.js';
+import { PostController } from './../controllers/post.controllers';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { AuthController } from '../controllers/auth.controllers.js';
-import { JoinWaitListController } from '../controllers/joinWaitList.js';
+import { JoinWaitListController } from './../controllers/joinWaitList';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { AuthController } from './../controllers/auth.controllers';
+import { expressAuthentication } from './../middleware/auth.middleware';
+// @ts-ignore - no great way to install types from subpackage
 import type { Request as ExRequest, Response as ExResponse, RequestHandler, Router } from 'express';
-import multer from 'multer';
+const multer = require('multer');
 
-const expressAuthenticationRecasted = authorizeUser;
+
+const expressAuthenticationRecasted = expressAuthentication as (req: ExRequest, securityName: string, scopes?: string[], res?: ExResponse) => Promise<any>;
 
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -719,7 +722,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
 
                     for (const name in secMethod) {
                         secMethodAndPromises.push(
-                            expressAuthenticationRecasted(request, name, secMethod[name], response, pushAndRethrow)
+                            expressAuthenticationRecasted(request, name, secMethod[name], response)
                                 .catch(pushAndRethrow)
                         );
                     }
@@ -731,7 +734,7 @@ export function RegisterRoutes(app: Router,opts?:{multer?:ReturnType<typeof mult
                 } else {
                     for (const name in secMethod) {
                         secMethodOrPromises.push(
-                            expressAuthenticationRecasted(request, name, secMethod[name], response, pushAndRethrow)
+                            expressAuthenticationRecasted(request, name, secMethod[name], response)
                                 .catch(pushAndRethrow)
                         );
                     }

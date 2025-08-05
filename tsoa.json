@@ -1,8 +1,10 @@
 {
   "entryFile": "server.ts",
-  "authenticationModule": "./middleware/auth.middleware",
+  "authenticationModule": "./src/middleware/auth.middleware.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/controllers/*.ts"],
+  "controllerPathGlobs": [
+    "src/controllers/*.ts"
+  ],
   "spec": {
     "outputDirectory": "src/docs",
     "specVersion": 3,
@@ -12,8 +14,15 @@
     "description": "API Docs for UNERRA"
   },
   "routes": {
+    "authenticationModule": "./src/middleware/auth.middleware.ts",
     "routesDir": "./src/build",
     "basePath": "/api/v1"
-
+  },
+  "securityDefinitions": {
+    "jwt": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
   }
 }
