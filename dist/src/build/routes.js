@@ -1,14 +1,14 @@
 import { fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from './../controllers/user.controller';
+import { UserController } from './../controllers/user.controller.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { PostController } from './../controllers/post.controllers';
+import { PostController } from './../controllers/post.controllers.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { JoinWaitListController } from './../controllers/joinWaitList';
+import { JoinWaitListController } from './../controllers/joinWaitList.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { AuthController } from './../controllers/auth.controllers';
-import { expressAuthentication } from './../middleware/auth.middleware';
-const multer = require('multer');
+import { AuthController } from './../controllers/auth.controllers.js';
+import { expressAuthentication } from './../middleware/auth.middleware.js';
+import multer from 'multer';
 const expressAuthenticationRecasted = expressAuthentication;
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 const models = {

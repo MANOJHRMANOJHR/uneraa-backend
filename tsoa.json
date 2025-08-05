@@ -9,14 +9,15 @@
     "outputDirectory": "src/docs",
     "specVersion": 3,
     "basePath": "/api/v1",
-    "name": "UNNERA API",
+    "name": "UNERRA API",
     "version": "1.0.0",
     "description": "API Docs for UNERRA"
   },
   "routes": {
     "authenticationModule": "./src/middleware/auth.middleware.ts",
     "routesDir": "./src/build",
-    "basePath": "/api/v1"
+    "basePath": "/api/v1",
+    "routesFileName": "routes.ts"
   },
   "securityDefinitions": {
     "jwt": {

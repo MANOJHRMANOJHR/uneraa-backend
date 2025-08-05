@@ -398,7 +398,7 @@
         "securitySchemes": {}
     },
     "info": {
-        "title": "UNNERA API",
+        "title": "UNERRA API",
         "version": "1.0.0",
         "description": "API Docs for UNERRA",
         "license": {
