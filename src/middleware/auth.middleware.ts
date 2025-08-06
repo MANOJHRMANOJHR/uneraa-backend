@@ -7,8 +7,12 @@ import prisma from '../lib/prisma.js';
 const TOKEN_SECRET = process.env.JWT_SECRET || '';
 
 export async function authorizeUser(
-req: Request, name: string,
-  _scheme: unknown, res: Response, next: NextFunction) {
+  req: Request,
+  name: string,
+  _scheme: unknown,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const tokenArr = req.headers.authorization?.split(' ');
 
@@ -89,19 +93,19 @@ export async function expressAuthentication(
   scopes?: string[]
 ): Promise<any> {
   if (securityName === 'jwt') {
-    const authHeader = request.headers.authorization
+    const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new ApiError(StatusCode.UNAUTHORIZED, 'No token provided')
+      throw new ApiError(StatusCode.UNAUTHORIZED, 'No token provided');
     }
 
-    const token = authHeader.split(' ')[1]
+    const token = authHeader.split(' ')[1];
 
     try {
-      const decoded = jwt.verify(token, TOKEN_SECRET)
+      const decoded = jwt.verify(token, TOKEN_SECRET);
 
       if (typeof decoded !== 'object' || !decoded.id) {
-        throw new ApiError(StatusCode.BAD_REQUEST, 'Invalid token payload')
+        throw new ApiError(StatusCode.BAD_REQUEST, 'Invalid token payload');
       }
 
       const user = await prisma.user.findUnique({
@@ -112,17 +116,17 @@ export async function expressAuthentication(
           username: true,
           email: true,
         },
-      })
+      });
 
       if (!user) {
-        throw new ApiError(StatusCode.NOT_FOUND, 'User not found')
+        throw new ApiError(StatusCode.NOT_FOUND, 'User not found');
       }
 
-      return user // this will be available in controller as request.user
+      return user; // this will be available in controller as request.user
     } catch (error) {
-      throw new ApiError(StatusCode.UNAUTHORIZED, 'Invalid or expired token')
+      throw new ApiError(StatusCode.UNAUTHORIZED, 'Invalid or expired token');
     }
   }
 
-  throw new ApiError(StatusCode.UNAUTHORIZED, 'Unknown security scheme')
+  throw new ApiError(StatusCode.UNAUTHORIZED, 'Unknown security scheme');
 }

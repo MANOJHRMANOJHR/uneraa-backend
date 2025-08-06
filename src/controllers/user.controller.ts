@@ -14,7 +14,12 @@ import {
   Response,
 } from 'tsoa';
 import prisma from '../lib/prisma.js';
-import { userEditSchema, userFollowerSchema, UserEditInput, UserFollowerInput } from './constrollersSchema.js';
+import {
+  userEditSchema,
+  userFollowerSchema,
+  UserEditInput,
+  UserFollowerInput,
+} from './constrollersSchema.js';
 import { StatusCode } from '../constants/statusCode.js';
 import ApiError from '../utils/api-error.js';
 import ApiResponse from '../utils/api-response.js';
@@ -25,9 +30,15 @@ import {
   UserProfileResponse,
   UserSummaryResponse,
   FollowResponse,
-  AuthenticatedRequest
+  AuthenticatedRequest,
 } from './types/user.type.js';
-import { DeleteUser, FollowUser, GetUser, GetUsers, UpdateUserProfile } from '../services/user/handler/user.js';
+import {
+  DeleteUser,
+  FollowUser,
+  GetUser,
+  GetUsers,
+  UpdateUserProfile,
+} from '../services/user/handler/user.js';
 
 @Route('user')
 @Tags('User')
@@ -45,8 +56,7 @@ export class UserController extends Controller {
     @Request() req: AuthenticatedRequest,
     @Body() body: UserEditInput
   ): Promise<ApiResponse<UserProfileResponse>> {
-
-    return await UpdateUserProfile(req, body)
+    return await UpdateUserProfile(req, body);
   }
 
   /**
@@ -57,8 +67,7 @@ export class UserController extends Controller {
   public async getUserById(
     @Path() userId: string
   ): Promise<ApiResponse<UserProfileResponse>> {
-
-    return await GetUser(userId)
+    return await GetUser(userId);
   }
 
   /**
@@ -72,8 +81,7 @@ export class UserController extends Controller {
     @Request() req: AuthenticatedRequest,
     @Path() userId: string
   ): Promise<ApiResponse<{}>> {
-
-    return await DeleteUser(req, userId)
+    return await DeleteUser(req, userId);
   }
 
   /**
@@ -84,8 +92,7 @@ export class UserController extends Controller {
     @Query() limit: number = 10,
     @Query() skip: number = 0
   ): Promise<ApiResponse<UserSummaryResponse[]>> {
-
-    return await GetUsers(limit, skip)
+    return await GetUsers(limit, skip);
   }
 
   /**
@@ -100,8 +107,7 @@ export class UserController extends Controller {
     @Request() req: AuthenticatedRequest,
     @Body() body: UserFollowerInput
   ): Promise<ApiResponse<FollowResponse>> {
-
-    return await FollowUser(req, body)
+    return await FollowUser(req, body);
   }
 
   /**

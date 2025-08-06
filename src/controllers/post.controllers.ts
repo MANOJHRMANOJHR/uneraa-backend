@@ -12,14 +12,21 @@ import {
   Path,
   Query,
   UploadedFiles,
-  FormField
+  FormField,
 } from 'tsoa';
-import {  EmojiInput, CommentInput } from './constrollersSchema.js';
+import { EmojiInput, CommentInput } from './constrollersSchema.js';
 import ApiResponse from '../utils/api-response.js';
 
 // import { postQueue } from '../utils/jobs/postQueue.js';
 import { AuthenticatedRequest } from './types/user.type.js';
-import { CreateComment, CreatePost, DeletePost, GetPost, PostLikeUnlike, UpdatePost } from '../services/post/handler/post.js';
+import {
+  CreateComment,
+  CreatePost,
+  DeletePost,
+  GetPost,
+  PostLikeUnlike,
+  UpdatePost,
+} from '../services/post/handler/post.js';
 
 @Route('post')
 @Tags('Post')
@@ -41,26 +48,43 @@ export class PostController extends Controller {
     @FormField() embedUrl?: string,
     @FormField() isPublished?: boolean,
     @FormField() publishedAt?: Date,
-    @UploadedFiles() files?: {
+    @UploadedFiles()
+    files?: {
       image?: Express.Multer.File[];
       video?: Express.Multer.File[];
     }
   ): Promise<ApiResponse<any>> {
-   
-    return await CreatePost(req, title, content, tags, category, markdown, videoUrl, imageUrl, embedUrl, isPublished, publishedAt, files)
+    return await CreatePost(
+      req,
+      title,
+      content,
+      tags,
+      category,
+      markdown,
+      videoUrl,
+      imageUrl,
+      embedUrl,
+      isPublished,
+      publishedAt,
+      files
+    );
   }
 
   @Get()
-  public async getPosts(@Query() skip: number = 0, @Query() limit: number = 10): Promise<ApiResponse<any>> {
-    
-    return await GetPost(skip, limit)
+  public async getPosts(
+    @Query() skip: number = 0,
+    @Query() limit: number = 10
+  ): Promise<ApiResponse<any>> {
+    return await GetPost(skip, limit);
   }
 
   @Delete('{id}')
   @Security('jwt')
-  public async deletePost(@Request() req: AuthenticatedRequest, @Path() id: string): Promise<ApiResponse<{}>> {
-    
-    return await DeletePost(req, id)
+  public async deletePost(
+    @Request() req: AuthenticatedRequest,
+    @Path() id: string
+  ): Promise<ApiResponse<{}>> {
+    return await DeletePost(req, id);
   }
 
   @Patch('{id}')
@@ -76,13 +100,25 @@ export class PostController extends Controller {
     @FormField() videoUrl?: string,
     @FormField() imageUrl?: string,
     @FormField() embedUrl?: string,
-    @UploadedFiles() files?: {
+    @UploadedFiles()
+    files?: {
       image?: Express.Multer.File[];
       video?: Express.Multer.File[];
     }
   ): Promise<ApiResponse<any>> {
-    
-    return await UpdatePost(req, id, title, content, tags, category, markdown, videoUrl, imageUrl, embedUrl, files )
+    return await UpdatePost(
+      req,
+      id,
+      title,
+      content,
+      tags,
+      category,
+      markdown,
+      videoUrl,
+      imageUrl,
+      embedUrl,
+      files
+    );
   }
 
   @Post('{id}/like')
@@ -92,8 +128,7 @@ export class PostController extends Controller {
     @Path() id: string,
     @Body() body: EmojiInput
   ): Promise<ApiResponse<any>> {
-    
-    return await PostLikeUnlike(req, id, body)
+    return await PostLikeUnlike(req, id, body);
   }
 
   @Post('{id}/comment')
@@ -103,8 +138,6 @@ export class PostController extends Controller {
     @Path() id: string,
     @Body() body: CommentInput
   ): Promise<ApiResponse<any>> {
-    
-    return await CreateComment(req, id, body)
+    return await CreateComment(req, id, body);
   }
-
 }

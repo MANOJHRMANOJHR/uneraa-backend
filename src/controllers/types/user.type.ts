@@ -60,5 +60,3 @@ export type FollowResponse = {
   message: string;
   isFollowing: boolean;
 };
-
-

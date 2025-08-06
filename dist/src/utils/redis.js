@@ -1,8 +1,7 @@
 import IORedis from 'ioredis';
-//for development, use a local Redis instance 
+//for development, use a local Redis instance
 // or a cloud Redis service like Upstash
 let redis = null;
-;
 const getRedisInstance = () => {
     if (!redis) {
         redis = new IORedis(process.env.UPSTASH_REDIS_URL || 'redis://localhost:6379', {

@@ -16,12 +16,12 @@ export const sendErrorToDiscord = async (errorInfo) => {
                 fields: [
                     { name: 'User', value: errorInfo.user || 'Guest', inline: true },
                     { name: 'Route', value: errorInfo.route || 'N/A', inline: true },
-                    { name: 'Method', value: errorInfo.method || 'N/A', inline: true }
+                    { name: 'Method', value: errorInfo.method || 'N/A', inline: true },
                 ],
                 footer: { text: errorInfo.stack?.split('\n')[1] || 'No stack trace' },
-                timestamp: new Date().toISOString()
-            }
-        ]
+                timestamp: new Date().toISOString(),
+            },
+        ],
     });
 };
 // function to send error to email

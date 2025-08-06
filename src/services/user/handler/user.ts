@@ -1,5 +1,10 @@
 import prisma from '../../../lib/prisma.js';
-import { userEditSchema, userFollowerSchema, UserEditInput, UserFollowerInput } from '../schema.js';
+import {
+  userEditSchema,
+  userFollowerSchema,
+  UserEditInput,
+  UserFollowerInput,
+} from '../schema.js';
 import { StatusCode } from '../../../constants/statusCode.js';
 import ApiError from '../../../utils/api-error.js';
 import ApiResponse from '../../../utils/api-response.js';
@@ -10,11 +15,13 @@ import {
   UserProfileResponse,
   UserSummaryResponse,
   FollowResponse,
-  AuthenticatedRequest
+  AuthenticatedRequest,
 } from '../types.js';
 
-
-export const UpdateUserProfile = async (req: AuthenticatedRequest, body: UserEditInput) => {
+export const UpdateUserProfile = async (
+  req: AuthenticatedRequest,
+  body: UserEditInput
+) => {
   const currentUserId = req.user?.id;
   if (!currentUserId) {
     throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
@@ -43,8 +50,8 @@ export const UpdateUserProfile = async (req: AuthenticatedRequest, body: UserEdi
         : null,
       username
         ? prisma.user.findFirst({
-          where: { username, NOT: { id: currentUserId } },
-        })
+            where: { username, NOT: { id: currentUserId } },
+          })
         : null,
     ]);
 
@@ -76,7 +83,11 @@ export const UpdateUserProfile = async (req: AuthenticatedRequest, body: UserEdi
     if (error instanceof PrismaClientKnownRequestError) {
       throw new ApiError(StatusCode.BAD_REQUEST, error.message);
     }
-    throw new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Something went wrong', error as any[]);
+    throw new ApiError(
+      StatusCode.INTERNAL_SERVER_ERROR,
+      'Something went wrong',
+      error as any[]
+    );
   }
 };
 
@@ -101,7 +112,11 @@ export const GetUser = async (userId: string) => {
     if (error instanceof PrismaClientKnownRequestError) {
       throw new ApiError(StatusCode.BAD_REQUEST, error.message);
     }
-    throw new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Something went wrong', error as any[]);
+    throw new ApiError(
+      StatusCode.INTERNAL_SERVER_ERROR,
+      'Something went wrong',
+      error as any[]
+    );
   }
 };
 
@@ -127,7 +142,7 @@ export const GetUsers = async (limit: number, skip: number) => {
       error instanceof Error ? [error.message] : []
     );
   }
-}
+};
 
 export const DeleteUser = async (req: AuthenticatedRequest, userId: string) => {
   if (req.user?.id !== userId) {
@@ -146,11 +161,18 @@ export const DeleteUser = async (req: AuthenticatedRequest, userId: string) => {
     if (error instanceof PrismaClientKnownRequestError) {
       throw new ApiError(StatusCode.BAD_REQUEST, error.message);
     }
-    throw new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Something went wrong', error as any[]);
+    throw new ApiError(
+      StatusCode.INTERNAL_SERVER_ERROR,
+      'Something went wrong',
+      error as any[]
+    );
   }
 };
 
-export const FollowUser = async (req: AuthenticatedRequest, body: UserFollowerInput) => {
+export const FollowUser = async (
+  req: AuthenticatedRequest,
+  body: UserFollowerInput
+) => {
   const currentUserId = req.user?.id;
   if (!currentUserId) {
     throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
@@ -212,6 +234,10 @@ export const FollowUser = async (req: AuthenticatedRequest, body: UserFollowerIn
     if (error instanceof PrismaClientKnownRequestError) {
       throw new ApiError(StatusCode.BAD_REQUEST, error.message);
     }
-    throw new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Something went wrong', [(error as Error).message]);
+    throw new ApiError(
+      StatusCode.INTERNAL_SERVER_ERROR,
+      'Something went wrong',
+      [(error as Error).message]
+    );
   }
 };

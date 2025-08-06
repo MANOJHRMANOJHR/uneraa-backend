@@ -10,10 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Controller, Post, Route, Tags, Request, Security, Response, UploadedFiles } from 'tsoa';
+import { Controller, Post, Route, Tags, Request, Security, Response, UploadedFiles, } from 'tsoa';
 import ApiResponse from '../utils/api-response.js';
 import { StatusCode } from '../constants/statusCode.js';
-import { LoginUser, LogoutUser, RegisterUser } from '../services/user/handler/auth.js';
+import { LoginUser, LogoutUser, RegisterUser, } from '../services/user/handler/auth.js';
 let AuthController = class AuthController extends Controller {
     secure = process.env.ENVIRONMENT !== 'development';
     /**

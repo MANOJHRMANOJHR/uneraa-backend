@@ -4,7 +4,7 @@
 
 ---
 
-## 📦 Tech Stack 
+## 📦 Tech Stack
 
 - **Runtime:** npm v1.2.8
 - **Language:** TypeScript

@@ -4,7 +4,7 @@ export enum EmojiType {
   LIKE = 'like',
   LAUGH = 'laugh',
   CRY = 'cry',
-  ANGRY = 'angry'
+  ANGRY = 'angry',
 }
 
 export const userRegisterSchema = z.object({
@@ -71,10 +71,10 @@ export type UserEditInput = {
   portfolioLink?: string;
 };
 
-export type UserFollowerInput ={
+export type UserFollowerInput = {
   followingId: string;
   followerId: string;
-}
+};
 
 export type UserPostInput = {
   title: string;
@@ -86,13 +86,13 @@ export type UserPostInput = {
   published: boolean;
   publishedAt: string;
   authorId: string;
-}
+};
 export type EmojiInput = {
   emoji: EmojiType;
-}
+};
 export type CommentInput = {
   content: string;
   postId: string;
   authorId: string;
   parentId?: string;
-}
+};

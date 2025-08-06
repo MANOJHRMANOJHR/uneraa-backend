@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000', // Adjust this to your frontend URL  
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000', // Adjust this to your frontend URL
     credentials: true,
   })
 );
@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use('/api/v1/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // ✅ TSOA-generated routes
-RegisterRoutes(app); 
+RegisterRoutes(app);
 app.use('/api/v1/auth', authRouter);
 app.get('/', (req, res) => {
   res.send('Hello UNERRA!');
@@ -47,8 +47,6 @@ app.use(
     globalErrorHandler(err, req, res, next);
   }
 );
-
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

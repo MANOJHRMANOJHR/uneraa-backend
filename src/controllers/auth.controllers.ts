@@ -7,14 +7,21 @@ import {
   Request,
   Security,
   Response,
-  UploadedFiles
+  UploadedFiles,
 } from 'tsoa';
-import { Request as ExpressRequest, Response as ExpressResponse } from 'express';
+import {
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from 'express';
 import ApiError from '../utils/api-error.js';
 import ApiResponse from '../utils/api-response.js';
 import { StatusCode } from '../constants/statusCode.js';
 import { AuthenticatedRequest } from './types/user.type.js';
-import { LoginUser, LogoutUser, RegisterUser } from '../services/user/handler/auth.js';
+import {
+  LoginUser,
+  LogoutUser,
+  RegisterUser,
+} from '../services/user/handler/auth.js';
 
 @Route('auth')
 @Tags('Auth')
@@ -29,14 +36,20 @@ export class AuthController extends Controller {
   @Response<ApiError>(StatusCode.BAD_REQUEST, 'Validation failed')
   public async registerUser(
     @Request() req: ExpressRequest,
-    @UploadedFiles() files?: {
+    @UploadedFiles()
+    files?: {
       profileImage?: Express.Multer.File[];
       coverImage?: Express.Multer.File[];
     }
   ): Promise<ApiResponse<any>> {
     const createdUser = await RegisterUser(req.body, files);
 
-    return new ApiResponse(StatusCode.OK, true, 'User registered successfully', createdUser);
+    return new ApiResponse(
+      StatusCode.OK,
+      true,
+      'User registered successfully',
+      createdUser
+    );
   }
 
   /**
@@ -45,7 +58,9 @@ export class AuthController extends Controller {
   @Post('/login')
   @Response<ApiError>(StatusCode.BAD_REQUEST, 'Validation failed')
   @Response<ApiError>(StatusCode.NOT_FOUND, 'Invalid credentials')
-  public async loginUser(@Request() req: ExpressRequest): Promise<ApiResponse<any>> {
+  public async loginUser(
+    @Request() req: ExpressRequest
+  ): Promise<ApiResponse<any>> {
     const token = await LoginUser(req.body);
 
     // Set cookie manually since we're using tsoa (outside of typical middleware)
@@ -55,7 +70,12 @@ export class AuthController extends Controller {
       sameSite: 'strict',
     });
 
-    return new ApiResponse(StatusCode.OK, true, 'Signed in successfully', token);
+    return new ApiResponse(
+      StatusCode.OK,
+      true,
+      'Signed in successfully',
+      token
+    );
   }
 
   /**
@@ -64,7 +84,9 @@ export class AuthController extends Controller {
   @Post('/logout')
   @Security('jwt')
   @Response<ApiError>(StatusCode.UNAUTHORIZED, 'Unauthorized')
-  public async logoutUser(@Request() req: AuthenticatedRequest): Promise<ApiResponse<any>> {
+  public async logoutUser(
+    @Request() req: AuthenticatedRequest
+  ): Promise<ApiResponse<any>> {
     await LogoutUser(req);
     (req as any).res?.clearCookie('auth_token', {
       httpOnly: true,
@@ -72,6 +94,11 @@ export class AuthController extends Controller {
       sameSite: 'strict',
     });
 
-    return new ApiResponse(StatusCode.OK, true, 'User logged out successfully', {});
+    return new ApiResponse(
+      StatusCode.OK,
+      true,
+      'User logged out successfully',
+      {}
+    );
   }
 }

@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 import { Controller, Get, Route, Tags, Patch, Delete, Body, Path, Query, Security, Request, Post, Response, } from 'tsoa';
 import { StatusCode } from '../constants/statusCode.js';
-import { DeleteUser, FollowUser, GetUser, GetUsers, UpdateUserProfile } from '../services/user/handler/user.js';
+import { DeleteUser, FollowUser, GetUser, GetUsers, UpdateUserProfile, } from '../services/user/handler/user.js';
 let UserController = class UserController extends Controller {
     /**
      * Update user profile

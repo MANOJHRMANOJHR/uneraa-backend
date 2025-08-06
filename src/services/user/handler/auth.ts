@@ -2,18 +2,24 @@ import prisma from '../../../lib/prisma.js';
 import bcrypt from 'bcrypt';
 import { uploadOnCloudinary } from '../../../utils/cloudinary.js';
 import { generateToken } from '../../../utils/jwt-token.js';
-import { userLoginSchema, userRegisterSchema } from '../../../controllers/constrollersSchema.js';
+import {
+  userLoginSchema,
+  userRegisterSchema,
+} from '../../../controllers/constrollersSchema.js';
 import ApiError from '../../../utils/api-error.js';
 import { StatusCode } from '../../../constants/statusCode.js';
 import { getUniqueUserName } from '../../../utils/uniqueUserName.js';
 import { AuthenticatedRequest } from '../../../controllers/types/user.type.js';
 
-
 export const RegisterUser = async (body: any, files?: any) => {
   const { success, data, error } = userRegisterSchema.safeParse(body);
 
   if (!success) {
-    throw new ApiError(StatusCode.BAD_REQUEST, 'Validation failed', error.errors);
+    throw new ApiError(
+      StatusCode.BAD_REQUEST,
+      'Validation failed',
+      error.errors
+    );
   }
 
   const { name, email, password, bio } = data;
@@ -21,7 +27,10 @@ export const RegisterUser = async (body: any, files?: any) => {
   const existingUser = await prisma.user.findFirst({ where: { email } });
 
   if (existingUser) {
-    throw new ApiError(StatusCode.CONFLICT, 'User already exists with this email');
+    throw new ApiError(
+      StatusCode.CONFLICT,
+      'User already exists with this email'
+    );
   }
 
   const profilePath = files?.profileImage?.[0]?.path;
@@ -59,13 +68,17 @@ export const RegisterUser = async (body: any, files?: any) => {
   });
 
   return createdUser;
-}
+};
 
 export const LoginUser = async (body: any) => {
   const { success, data, error } = userLoginSchema.safeParse(body);
 
   if (!success || !data) {
-    throw new ApiError(StatusCode.BAD_REQUEST, 'Validation failed', error?.errors || []);
+    throw new ApiError(
+      StatusCode.BAD_REQUEST,
+      'Validation failed',
+      error?.errors || []
+    );
   }
 
   const { emailOrUsername, password } = data;
@@ -88,8 +101,8 @@ export const LoginUser = async (body: any) => {
 
   const token = generateToken(user);
 
-  return token
-}
+  return token;
+};
 
 export const LogoutUser = async (req: AuthenticatedRequest) => {
   const userEmail = req.user?.email;
@@ -105,4 +118,4 @@ export const LogoutUser = async (req: AuthenticatedRequest) => {
   }
 
   return true;
-}
+};

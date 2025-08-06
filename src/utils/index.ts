@@ -13,7 +13,10 @@ export function getUserId(req: AuthenticatedRequest): string {
 }
 
 export async function getPostOrThrow(id: string) {
-  const post = await prisma.post.findUnique({ where: { id }, select: { id: true, authorId: true } });
+  const post = await prisma.post.findUnique({
+    where: { id },
+    select: { id: true, authorId: true },
+  });
   if (!post) throw new ApiError(StatusCode.NOT_FOUND, 'Post not found');
   return post;
 }
@@ -23,11 +26,17 @@ export function parseTags(tags?: string): string[] {
   try {
     return JSON.parse(tags);
   } catch {
-    throw new ApiError(StatusCode.BAD_REQUEST, 'Tags must be a valid JSON array');
+    throw new ApiError(
+      StatusCode.BAD_REQUEST,
+      'Tags must be a valid JSON array'
+    );
   }
 }
 
-export async function handleFileUpload(file?: Express.Multer.File, folder = '') {
+export async function handleFileUpload(
+  file?: Express.Multer.File,
+  folder = ''
+) {
   if (!file?.path) return undefined;
   const result = await uploadOnCloudinary(file.path, folder);
   return typeof result === 'string' ? result : result?.url;
@@ -41,7 +50,9 @@ export function handlePrismaError(error: unknown): never {
       case 'P2002':
         throw new ApiError(StatusCode.CONFLICT, 'Database conflict');
       default:
-        throw new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Database error', [error.message]);
+        throw new ApiError(StatusCode.INTERNAL_SERVER_ERROR, 'Database error', [
+          error.message,
+        ]);
     }
   }
 
