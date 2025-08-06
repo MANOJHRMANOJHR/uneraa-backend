@@ -29,8 +29,8 @@ app.use('/api/v1/auth', authRouter);
 app.get('/', (req, res) => {
     res.send('Hello UNERRA!');
 });
-app.use((err, req, res, next) => {
-    globalErrorHandler(err, req, res, next);
+app.use((err, res) => {
+    globalErrorHandler(err, res);
 });
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

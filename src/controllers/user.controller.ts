@@ -13,20 +13,11 @@ import {
   Post,
   Response,
 } from 'tsoa';
-import prisma from '../lib/prisma.js';
-import {
-  userEditSchema,
-  userFollowerSchema,
-  UserEditInput,
-  UserFollowerInput,
-} from './constrollersSchema.js';
+import { UserEditInput, UserFollowerInput } from './constrollersSchema.js';
 import { StatusCode } from '../constants/statusCode.js';
 import ApiError from '../utils/api-error.js';
 import ApiResponse from '../utils/api-response.js';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import {
-  userProfileSelect,
-  userSummarySelect,
   UserProfileResponse,
   UserSummaryResponse,
   FollowResponse,

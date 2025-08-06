@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Post,
   Route,
@@ -9,10 +8,7 @@ import {
   Response,
   UploadedFiles,
 } from 'tsoa';
-import {
-  Request as ExpressRequest,
-  Response as ExpressResponse,
-} from 'express';
+import { Request as ExpressRequest } from 'express';
 import ApiError from '../utils/api-error.js';
 import ApiResponse from '../utils/api-response.js';
 import { StatusCode } from '../constants/statusCode.js';

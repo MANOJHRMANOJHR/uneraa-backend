@@ -40,11 +40,10 @@ app.get('/', (req, res) => {
 app.use(
   (
     err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
+
+    res: express.Response
   ) => {
-    globalErrorHandler(err, req, res, next);
+    globalErrorHandler(err, res);
   }
 );
 

@@ -14,7 +14,6 @@ import {
   userSummarySelect,
   UserProfileResponse,
   UserSummaryResponse,
-  FollowResponse,
   AuthenticatedRequest,
 } from '../types.js';
 

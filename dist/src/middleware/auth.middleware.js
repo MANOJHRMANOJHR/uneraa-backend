@@ -56,7 +56,7 @@ export async function authorizeUser(req, name, _scheme, res, next) {
         return;
     }
 }
-export async function expressAuthentication(request, securityName, scopes) {
+export async function expressAuthentication(request, securityName) {
     if (securityName === 'jwt') {
         const authHeader = request.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -83,6 +83,7 @@ export async function expressAuthentication(request, securityName, scopes) {
             return user; // this will be available in controller as request.user
         }
         catch (error) {
+            console.log('error:', error);
             throw new ApiError(StatusCode.UNAUTHORIZED, 'Invalid or expired token');
         }
     }

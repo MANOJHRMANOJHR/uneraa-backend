@@ -13,7 +13,7 @@ export function verifyToken(token) {
         return jwt.verify(token, JWT_SECRET);
     }
     catch (error) {
-        console.log('token verification failed');
+        console.log('token verification failed', error);
         return null;
     }
 }
