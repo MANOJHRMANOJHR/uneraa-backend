@@ -1,8 +1,9 @@
-import { userEditSchema, userFollowerSchema } from './schema.js';
-import { z } from 'zod';
-
-export type UserEditInput = z.infer<typeof userEditSchema>;
-export type UserFollowerInput = z.infer<typeof userFollowerSchema>;
+export enum EmojiType {
+  LIKE = 'like',
+  LAUGH = 'laugh',
+  CRY = 'cry',
+  ANGRY = 'angry',
+}
 
 export const userProfileSelect = {
   id: true,
@@ -59,4 +60,43 @@ export type UserSummaryResponse = {
 export type FollowResponse = {
   message: string;
   isFollowing: boolean;
+};
+
+export type UserEditInput = {
+  name?: string;
+  email?: string;
+  bio?: string;
+  username?: string;
+  portfolioLink?: string;
+};
+
+export type UserFollowerInput = {
+  followingId: string;
+  followerId: string;
+};
+
+export type UserPostInput = {
+  id: string;
+  title: string;
+  content: string;
+  categoryId: string;
+  category: string;
+  tags: string;
+  imageUrl: string;
+  videoUrl: string;
+  published: boolean;
+  publishedAt: string;
+  authorId: string;
+  embedUrl: string;
+  isPublished: boolean;
+
+};
+export type EmojiInput = {
+  emoji: EmojiType;
+};
+export type CommentInput = {
+  content: string;
+  postId: string;
+  authorId: string;
+  parentId?: string;
 };
