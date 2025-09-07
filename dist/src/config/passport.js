@@ -54,7 +54,7 @@ passport.use(new DiscordStrategy({
 }, async (accessToken, refreshToken, profile, cb) => {
     try {
         const user = await findOrCreateUser('discord', profile);
-        console.log("user in callback", user);
+        console.log('user in callback', user);
         return cb(null, user);
     }
     catch (error) {

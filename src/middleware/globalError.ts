@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response } from 'express';
 import ApiError from '../utils/api-error.js';
-import { sendErrorToDiscord, sendErrorToEmail } from '../utils/notifier.js';
+// import { sendErrorToDiscord, sendErrorToEmail } from '../utils/notifier.js';
 import { StatusCode } from '../constants/statusCode.js';
 import ApiResponce from '../utils/api-response.js';
 
@@ -15,21 +15,20 @@ declare global {
 
 export const globalErrorHandler = async (
   err: ApiError,
-  req: Request,
-  res: Response,
-  _next: NextFunction
+  // req: Request,
+  res: Response
 ) => {
   const statusCode = err.statusCode || StatusCode.INTERNAL_SERVER_ERROR;
   const message = err.message || 'Something went wrong';
   const errors = err.errors || [];
 
-  const errorInfo = {
-    message,
-    stack: err.stack,
-    route: req.originalUrl,
-    method: req.method,
-    body: req.body, // include form data
-  };
+  // const errorInfo = {
+  //   message,
+  //   stack: err.stack,
+  //   route: req.originalUrl,
+  //   method: req.method,
+  //   body: req.body, // include form data
+  // };
 
   // // Send alerts
   // await sendErrorToDiscord(errorInfo);

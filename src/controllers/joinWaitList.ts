@@ -1,10 +1,4 @@
-import {
-  Route,
-  Tags,
-  Post,
-  Body,
-  Response,
-} from 'tsoa';
+import { Route, Tags, Post, Body, Response } from 'tsoa';
 import prisma from '../lib/prisma.js';
 import ApiResponse from '../utils/api-response.js';
 import ApiError from '../utils/api-error.js';
@@ -43,7 +37,12 @@ export class JoinWaitListController {
       });
 
       if (existing) {
-        return new ApiResponse(StatusCode.CONFLICT,false, 'Email already exists', '');
+        return new ApiResponse(
+          StatusCode.CONFLICT,
+          false,
+          'Email already exists',
+          ''
+        );
       }
 
       await prisma.joinWaitlist.create({
@@ -62,22 +61,22 @@ export class JoinWaitListController {
   }
 
   private handlePrismaError(error: unknown): ApiResponse<string> {
-  if (error instanceof PrismaClientKnownRequestError) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      return new ApiResponse(
+        StatusCode.INTERNAL_SERVER_ERROR,
+        false,
+        'Database error',
+        error.message
+      );
+    }
+
+    if (error instanceof ApiError) throw error;
+
     return new ApiResponse(
       StatusCode.INTERNAL_SERVER_ERROR,
       false,
-      'Database error',
-      error.message
+      'Internal server error',
+      error instanceof Error ? error.message : ''
     );
   }
-
-  if (error instanceof ApiError) throw error;
-
-  return new ApiResponse(
-    StatusCode.INTERNAL_SERVER_ERROR,
-    false,
-    'Internal server error',
-    error instanceof Error ? error.message : ''
-  );
-}
 }

@@ -3,7 +3,7 @@ import emitter from '../utils/emitter.js';
 emitter.on('PostPublished', async (post) => {
     const followers = await prisma.follow.findMany({
         where: { followingId: post.authorId },
-        include: { follower: true }
+        include: { follower: true },
     });
     for (const follow of followers) {
         const user = follow.follower;

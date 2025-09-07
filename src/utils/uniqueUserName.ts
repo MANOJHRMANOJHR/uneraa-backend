@@ -1,6 +1,6 @@
-import prisma from "../lib/prisma.js";
+import prisma from '../lib/prisma.js';
 
-export const  getUniqueUserName = async (email: string) => { 
+export const getUniqueUserName = async (email: string) => {
   const baseName = email.split('@')[0];
   let uniqueName = baseName;
   let counter = 1;
@@ -19,4 +19,4 @@ export const  getUniqueUserName = async (email: string) => {
     uniqueName = `${baseName}${counter}`;
     counter++;
   }
-} 
+};

@@ -31,7 +31,7 @@ passport.use(
         const user = await findOrCreateUser('google', profile);
         return cb(null, user);
       } catch (error) {
-        return cb(error as Error);
+        return cb(error);
       }
     }
   )
@@ -79,7 +79,7 @@ passport.use(
     ) => {
       try {
         const user = await findOrCreateUser('discord', profile);
-        console.log("user in callback", user);
+        console.log('user in callback', user);
         return cb(null, user);
       } catch (error) {
         return cb(error as Error);
@@ -160,7 +160,6 @@ function getFirstNameFromProfile(provider: string, profile: any): string {
       return 'User';
   }
 }
-
 
 function getProfileImageFromProfile(provider: string, profile: any): string {
   switch (provider) {

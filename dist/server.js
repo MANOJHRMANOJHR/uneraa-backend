@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: process.env.CORS_ORIGIN || 'http://localhost:3000', // Adjust this to your frontend URL
     credentials: true,
 }));
 app.use(passport.initialize());
@@ -29,8 +29,8 @@ app.use('/api/v1/auth', authRouter);
 app.get('/', (req, res) => {
     res.send('Hello UNERRA!');
 });
-app.use((err, req, res, next) => {
-    globalErrorHandler(err, req, res, next);
+app.use((err, res) => {
+    globalErrorHandler(err, res);
 });
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

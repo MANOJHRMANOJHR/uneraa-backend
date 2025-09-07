@@ -1,4 +1,4 @@
-import { userEditSchema, userFollowerSchema } from '../constrollersSchema.js';
+import { userEditSchema, userFollowerSchema } from './schema.js';
 import { z } from 'zod';
 
 export type UserEditInput = z.infer<typeof userEditSchema>;

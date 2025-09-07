@@ -5,9 +5,12 @@ import { generateToken } from '../utils/jwt-token.js';
 const authRouter: Router = Router();
 
 const secureEnvironment = process.env.ENVIRONMENT !== 'development';
-const frontendRedirectUrl = process.env.FRONTEND_REDIRECT_URL || 'http://localhost:3000/@me';
+const frontendRedirectUrl =
+  process.env.FRONTEND_REDIRECT_URL || 'http://localhost:3000/@me';
 
-authRouter.route('/google').get(passport.authenticate('google', { scope: ['profile', 'email'] }));
+authRouter
+  .route('/google')
+  .get(passport.authenticate('google', { scope: ['profile', 'email'] }));
 authRouter.route('/google/callback').get(
   passport.authenticate('google', {
     session: false,
@@ -16,7 +19,9 @@ authRouter.route('/google/callback').get(
   handleOAuthCallback
 );
 
-authRouter.route('/github').get(passport.authenticate('github', { scope: ['user:email'] }));
+authRouter
+  .route('/github')
+  .get(passport.authenticate('github', { scope: ['user:email'] }));
 authRouter.route('/github/callback').get(
   passport.authenticate('github', {
     session: false,
@@ -25,7 +30,9 @@ authRouter.route('/github/callback').get(
   handleOAuthCallback
 );
 
-authRouter.route('/discord').get(passport.authenticate('discord', { scope: ['identify', 'email'] }));
+authRouter
+  .route('/discord')
+  .get(passport.authenticate('discord', { scope: ['identify', 'email'] }));
 authRouter.route('/discord/callback').get(
   passport.authenticate('discord', {
     session: false,

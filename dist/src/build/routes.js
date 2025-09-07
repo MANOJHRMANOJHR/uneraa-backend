@@ -1,14 +1,15 @@
-import { authorizeUser } from '../middleware/auth.middleware.js';
 import { fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from '../controllers/user.controller.js';
+import { UserController } from './../controllers/user.controller.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { PostController } from '../controllers/post.controllers.js';
+import { PostController } from './../controllers/post.controllers.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { AuthController } from '../controllers/auth.controllers.js';
-import { JoinWaitListController } from '../controllers/joinWaitList.js';
+import { JoinWaitListController } from './../controllers/joinWaitList.js';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { AuthController } from './../controllers/auth.controllers.js';
+import { expressAuthentication } from './../middleware/auth.middleware.js';
 import multer from 'multer';
-const expressAuthenticationRecasted = authorizeUser;
+const expressAuthenticationRecasted = expressAuthentication;
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 const models = {
     "UserProfileResponse": {
@@ -380,29 +381,6 @@ export function RegisterRoutes(app, opts) {
         }
     });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsPostController_getPostLikes = {
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-    };
-    app.get('/api/v1/post/:id/likes', ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.getPostLikes)), async function PostController_getPostLikes(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_getPostLikes, request, response });
-            const controller = new PostController();
-            await templateService.apiHandler({
-                methodName: 'getPostLikes',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     const argsPostController_toggleLike = {
         req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
@@ -568,7 +546,7 @@ export function RegisterRoutes(app, opts) {
                 if (Object.keys(secMethod).length > 1) {
                     const secMethodAndPromises = [];
                     for (const name in secMethod) {
-                        secMethodAndPromises.push(expressAuthenticationRecasted(request, name, secMethod[name], response, pushAndRethrow)
+                        secMethodAndPromises.push(expressAuthenticationRecasted(request, name, secMethod[name], response)
                             .catch(pushAndRethrow));
                     }
                     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -577,7 +555,7 @@ export function RegisterRoutes(app, opts) {
                 }
                 else {
                     for (const name in secMethod) {
-                        secMethodOrPromises.push(expressAuthenticationRecasted(request, name, secMethod[name], response, pushAndRethrow)
+                        secMethodOrPromises.push(expressAuthenticationRecasted(request, name, secMethod[name], response)
                             .catch(pushAndRethrow));
                     }
                 }
