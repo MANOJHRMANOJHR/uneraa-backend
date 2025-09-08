@@ -24,12 +24,7 @@
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
@@ -54,11 +49,7 @@
                         "default": []
                     }
                 },
-                "required": [
-                    "name",
-                    "message",
-                    "statusCode"
-                ],
+                "required": ["name", "message", "statusCode"],
                 "type": "object",
                 "additionalProperties": false
             },
@@ -78,12 +69,7 @@
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
@@ -105,22 +91,12 @@
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
             "EmojiType": {
-                "enum": [
-                    "like",
-                    "laugh",
-                    "cry",
-                    "angry"
-                ],
+                "enum": ["like", "laugh", "cry", "angry"],
                 "type": "string"
             },
             "EmojiInput": {
@@ -129,9 +105,7 @@
                         "$ref": "#/components/schemas/EmojiType"
                     }
                 },
-                "required": [
-                    "emoji"
-                ],
+                "required": ["emoji"],
                 "type": "object"
             },
             "CommentInput": {
@@ -149,11 +123,7 @@
                         "type": "string"
                     }
                 },
-                "required": [
-                    "authorId",
-                    "postId",
-                    "content"
-                ],
+                "required": ["authorId", "postId", "content"],
                 "type": "object"
             },
             "UserProfileResponse": {
@@ -229,12 +199,7 @@
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
@@ -325,12 +290,7 @@
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
@@ -343,10 +303,7 @@
                         "type": "string"
                     }
                 },
-                "required": [
-                    "isFollowing",
-                    "message"
-                ],
+                "required": ["isFollowing", "message"],
                 "type": "object"
             },
             "ApiResponse_FollowResponse_": {
@@ -370,12 +327,7 @@
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
@@ -388,10 +340,7 @@
                         "type": "string"
                     }
                 },
-                "required": [
-                    "followerId",
-                    "followingId"
-                ],
+                "required": ["followerId", "followingId"],
                 "type": "object"
             }
         },
@@ -455,9 +404,7 @@
                     }
                 },
                 "description": "Submit the join waitlist form",
-                "tags": [
-                    "JoinWaitList"
-                ],
+                "tags": ["JoinWaitList"],
                 "security": [],
                 "parameters": [],
                 "requestBody": {
@@ -474,10 +421,7 @@
                                         "type": "string"
                                     }
                                 },
-                                "required": [
-                                    "email",
-                                    "name"
-                                ],
+                                "required": ["email", "name"],
                                 "type": "object",
                                 "description": "- Contains name and email"
                             }
@@ -522,9 +466,7 @@
                     }
                 },
                 "description": "Register a new user",
-                "tags": [
-                    "Auth"
-                ],
+                "tags": ["Auth"],
                 "security": [],
                 "parameters": [],
                 "requestBody": {
@@ -584,9 +526,7 @@
                     }
                 },
                 "description": "Login a user",
-                "tags": [
-                    "Auth"
-                ],
+                "tags": ["Auth"],
                 "security": [],
                 "parameters": []
             }
@@ -617,9 +557,7 @@
                     }
                 },
                 "description": "Logout a user",
-                "tags": [
-                    "Auth"
-                ],
+                "tags": ["Auth"],
                 "security": [
                     {
                         "jwt": []
@@ -644,9 +582,7 @@
                     }
                 },
                 "description": "Create a new post",
-                "tags": [
-                    "Post"
-                ],
+                "tags": ["Post"],
                 "security": [
                     {
                         "jwt": []
@@ -743,9 +679,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "Post"
-                ],
+                "tags": ["Post"],
                 "security": [],
                 "parameters": [
                     {
@@ -786,9 +720,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "Post"
-                ],
+                "tags": ["Post"],
                 "security": [
                     {
                         "jwt": []
@@ -819,9 +751,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "Post"
-                ],
+                "tags": ["Post"],
                 "security": [
                     {
                         "jwt": []
@@ -918,9 +848,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "Post"
-                ],
+                "tags": ["Post"],
                 "security": [
                     {
                         "jwt": []
@@ -963,9 +891,7 @@
                         }
                     }
                 },
-                "tags": [
-                    "Post"
-                ],
+                "tags": ["Post"],
                 "security": [
                     {
                         "jwt": []
@@ -1049,9 +975,7 @@
                     }
                 },
                 "description": "Update user profile",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [
                     {
                         "jwt": []
@@ -1096,9 +1020,7 @@
                     }
                 },
                 "description": "Get user by ID",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [],
                 "parameters": [
                     {
@@ -1146,9 +1068,7 @@
                     }
                 },
                 "description": "Delete user",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [
                     {
                         "jwt": []
@@ -1182,9 +1102,7 @@
                     }
                 },
                 "description": "Get users with pagination",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [],
                 "parameters": [
                     {
@@ -1256,9 +1174,7 @@
                     }
                 },
                 "description": "Follow or unfollow a user",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [
                     {
                         "jwt": []
