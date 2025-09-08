@@ -13,23 +13,23 @@ import {
   Post,
   Response,
 } from 'tsoa';
-import { UserEditInput, UserFollowerInput } from './constrollersSchema.js';
-import { StatusCode } from '../constants/statusCode.js';
-import ApiError from '../utils/api-error.js';
-import ApiResponse from '../utils/api-response.js';
+import { UserEditInput, UserFollowerInput } from './schema.js';
+import { StatusCode } from '../../constants/statusCode.js';
+import ApiError from '../../utils/api-error.js';
+import ApiResponse from '../../utils/api-response.js';
 import {
   UserProfileResponse,
   UserSummaryResponse,
   FollowResponse,
   AuthenticatedRequest,
-} from './types/user.type.js';
+} from './types.js';
 import {
   DeleteUser,
   FollowUser,
   GetUser,
   GetUsers,
   UpdateUserProfile,
-} from '../services/user/handler/user.js';
+} from './handler/user.js';
 
 @Route('user')
 @Tags('User')

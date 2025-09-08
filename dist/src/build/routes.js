@@ -1,29 +1,24 @@
 import { fetchMiddlewares, ExpressTemplateService } from '@tsoa/runtime';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from './../controllers/user.controller.js';
+import { JoinWaitListController } from './../services/joinWaitList.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { PostController } from './../controllers/post.controllers.js';
+import { AuthController } from './../services/auth.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { JoinWaitListController } from './../controllers/joinWaitList.js';
+import { PostController } from './../services/post/index.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { AuthController } from './../controllers/auth.controllers.js';
+import { UserController } from './../services/user/index.js';
 import { expressAuthentication } from './../middleware/auth.middleware.js';
 import multer from 'multer';
 const expressAuthenticationRecasted = expressAuthentication;
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 const models = {
-    "UserProfileResponse": {
-        "dataType": "refAlias",
-        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "techStack": { "dataType": "array", "array": { "dataType": "string" }, "required": true }, "coverImgUrl": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "profileImgUrl": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "portfolioLink": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "bio": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "email": { "dataType": "string", "required": true }, "username": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "name": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "id": { "dataType": "string", "required": true } }, "validators": {} },
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse_UserProfileResponse_": {
+    "ApiResponse_string_": {
         "dataType": "refObject",
         "properties": {
             "statusCode": { "dataType": "double", "required": true },
             "status": { "dataType": "boolean", "required": true },
             "message": { "dataType": "string", "required": true },
-            "data": { "dataType": "union", "subSchemas": [{ "ref": "UserProfileResponse" }, { "dataType": "enum", "enums": [null] }], "required": true },
+            "data": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true },
         },
         "additionalProperties": false,
     },
@@ -40,9 +35,15 @@ const models = {
         "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "UserEditInput": {
-        "dataType": "refAlias",
-        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "portfolioLink": { "dataType": "string" }, "username": { "dataType": "string" }, "bio": { "dataType": "string" }, "email": { "dataType": "string" }, "name": { "dataType": "string" } }, "validators": {} },
+    "ApiResponse_any_": {
+        "dataType": "refObject",
+        "properties": {
+            "statusCode": { "dataType": "double", "required": true },
+            "status": { "dataType": "boolean", "required": true },
+            "message": { "dataType": "string", "required": true },
+            "data": { "dataType": "union", "subSchemas": [{ "dataType": "any" }, { "dataType": "enum", "enums": [null] }], "required": true },
+        },
+        "additionalProperties": false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "ApiResponse____": {
@@ -54,6 +55,42 @@ const models = {
             "data": { "dataType": "union", "subSchemas": [{ "dataType": "nestedObjectLiteral", "nestedProperties": {} }, { "dataType": "enum", "enums": [null] }], "required": true },
         },
         "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "EmojiType": {
+        "dataType": "refEnum",
+        "enums": ["like", "laugh", "cry", "angry"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "EmojiInput": {
+        "dataType": "refAlias",
+        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "emoji": { "ref": "EmojiType", "required": true } }, "validators": {} },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "CommentInput": {
+        "dataType": "refAlias",
+        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "parentId": { "dataType": "string" }, "authorId": { "dataType": "string", "required": true }, "postId": { "dataType": "string", "required": true }, "content": { "dataType": "string", "required": true } }, "validators": {} },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserProfileResponse": {
+        "dataType": "refAlias",
+        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "techStack": { "dataType": "array", "array": { "dataType": "string" }, "required": true }, "coverImgUrl": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "profileImgUrl": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "portfolioLink": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "bio": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "email": { "dataType": "string", "required": true }, "username": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "name": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true }, "id": { "dataType": "string", "required": true } }, "validators": {} },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "ApiResponse_UserProfileResponse_": {
+        "dataType": "refObject",
+        "properties": {
+            "statusCode": { "dataType": "double", "required": true },
+            "status": { "dataType": "boolean", "required": true },
+            "message": { "dataType": "string", "required": true },
+            "data": { "dataType": "union", "subSchemas": [{ "ref": "UserProfileResponse" }, { "dataType": "enum", "enums": [null] }], "required": true },
+        },
+        "additionalProperties": false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "UserEditInput": {
+        "dataType": "refAlias",
+        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "portfolioLink": { "dataType": "string" }, "username": { "dataType": "string" }, "bio": { "dataType": "string" }, "email": { "dataType": "string" }, "name": { "dataType": "string" } }, "validators": {} },
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "UserSummaryResponse": {
@@ -93,43 +130,6 @@ const models = {
         "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "followerId": { "dataType": "string", "required": true }, "followingId": { "dataType": "string", "required": true } }, "validators": {} },
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse_any_": {
-        "dataType": "refObject",
-        "properties": {
-            "statusCode": { "dataType": "double", "required": true },
-            "status": { "dataType": "boolean", "required": true },
-            "message": { "dataType": "string", "required": true },
-            "data": { "dataType": "union", "subSchemas": [{ "dataType": "any" }, { "dataType": "enum", "enums": [null] }], "required": true },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "EmojiType": {
-        "dataType": "refEnum",
-        "enums": ["like", "laugh", "cry", "angry"],
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "EmojiInput": {
-        "dataType": "refAlias",
-        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "emoji": { "ref": "EmojiType", "required": true } }, "validators": {} },
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "CommentInput": {
-        "dataType": "refAlias",
-        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "parentId": { "dataType": "string" }, "authorId": { "dataType": "string", "required": true }, "postId": { "dataType": "string", "required": true }, "content": { "dataType": "string", "required": true } }, "validators": {} },
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "ApiResponse_string_": {
-        "dataType": "refObject",
-        "properties": {
-            "statusCode": { "dataType": "double", "required": true },
-            "status": { "dataType": "boolean", "required": true },
-            "message": { "dataType": "string", "required": true },
-            "data": { "dataType": "union", "subSchemas": [{ "dataType": "string" }, { "dataType": "enum", "enums": [null] }], "required": true },
-        },
-        "additionalProperties": false,
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
 const templateService = new ExpressTemplateService(models, { "noImplicitAdditionalProperties": "throw-on-extras", "bodyCoercion": true });
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -139,6 +139,283 @@ export function RegisterRoutes(app, opts) {
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
     const upload = opts?.multer || multer({ "limits": { "fileSize": 8388608 } });
+    const argsJoinWaitListController_submitWaitListForm = {
+        body: { "in": "body", "name": "body", "required": true, "dataType": "nestedObjectLiteral", "nestedProperties": { "email": { "dataType": "string", "required": true }, "name": { "dataType": "string", "required": true } } },
+    };
+    app.post('/api/v1/join-waitlist/submit', ...(fetchMiddlewares(JoinWaitListController)), ...(fetchMiddlewares(JoinWaitListController.prototype.submitWaitListForm)), async function JoinWaitListController_submitWaitListForm(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsJoinWaitListController_submitWaitListForm, request, response });
+            const controller = new JoinWaitListController();
+            await templateService.apiHandler({
+                methodName: 'submitWaitListForm',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsAuthController_registerUser = {
+        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        files: { "in": "formData", "name": "files", "dataType": "array", "array": { "dataType": "file" } },
+    };
+    app.post('/api/v1/auth/register', upload.fields([
+        {
+            name: "files",
+        }
+    ]), ...(fetchMiddlewares(AuthController)), ...(fetchMiddlewares(AuthController.prototype.registerUser)), async function AuthController_registerUser(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsAuthController_registerUser, request, response });
+            const controller = new AuthController();
+            await templateService.apiHandler({
+                methodName: 'registerUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsAuthController_loginUser = {
+        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+    };
+    app.post('/api/v1/auth/login', ...(fetchMiddlewares(AuthController)), ...(fetchMiddlewares(AuthController.prototype.loginUser)), async function AuthController_loginUser(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsAuthController_loginUser, request, response });
+            const controller = new AuthController();
+            await templateService.apiHandler({
+                methodName: 'loginUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsAuthController_logoutUser = {
+        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+    };
+    app.post('/api/v1/auth/logout', authenticateMiddleware([{ "jwt": [] }]), ...(fetchMiddlewares(AuthController)), ...(fetchMiddlewares(AuthController.prototype.logoutUser)), async function AuthController_logoutUser(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsAuthController_logoutUser, request, response });
+            const controller = new AuthController();
+            await templateService.apiHandler({
+                methodName: 'logoutUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsPostController_createPost = {
+        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        id: { "in": "formData", "name": "id", "required": true, "dataType": "string" },
+        title: { "in": "formData", "name": "title", "required": true, "dataType": "string" },
+        content: { "in": "formData", "name": "content", "required": true, "dataType": "string" },
+        categoryId: { "in": "formData", "name": "categoryId", "required": true, "dataType": "string" },
+        category: { "in": "formData", "name": "category", "required": true, "dataType": "string" },
+        tags: { "in": "formData", "name": "tags", "required": true, "dataType": "string" },
+        imageUrl: { "in": "formData", "name": "imageUrl", "required": true, "dataType": "string" },
+        videoUrl: { "in": "formData", "name": "videoUrl", "required": true, "dataType": "string" },
+        published: { "in": "formData", "name": "published", "required": true, "dataType": "string" },
+        publishedAt: { "in": "formData", "name": "publishedAt", "required": true, "dataType": "string" },
+        authorId: { "in": "formData", "name": "authorId", "required": true, "dataType": "string" },
+        embedUrl: { "in": "formData", "name": "embedUrl", "required": true, "dataType": "string" },
+        isPublished: { "in": "formData", "name": "isPublished", "required": true, "dataType": "string" },
+        files: { "in": "formData", "name": "files", "dataType": "array", "array": { "dataType": "file" } },
+    };
+    app.post('/api/v1/post/create', authenticateMiddleware([{ "jwt": [] }]), upload.fields([
+        {
+            name: "files",
+        }
+    ]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.createPost)), async function PostController_createPost(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_createPost, request, response });
+            const controller = new PostController();
+            await templateService.apiHandler({
+                methodName: 'createPost',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsPostController_getPosts = {
+        skip: { "default": 0, "in": "query", "name": "skip", "dataType": "double" },
+        limit: { "default": 10, "in": "query", "name": "limit", "dataType": "double" },
+    };
+    app.get('/api/v1/post', ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.getPosts)), async function PostController_getPosts(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_getPosts, request, response });
+            const controller = new PostController();
+            await templateService.apiHandler({
+                methodName: 'getPosts',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsPostController_deletePost = {
+        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+    };
+    app.delete('/api/v1/post/:id', authenticateMiddleware([{ "jwt": [] }]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.deletePost)), async function PostController_deletePost(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_deletePost, request, response });
+            const controller = new PostController();
+            await templateService.apiHandler({
+                methodName: 'deletePost',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsPostController_updatePost = {
+        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        id: { "in": "formData", "name": "id", "required": true, "dataType": "string" },
+        title: { "in": "formData", "name": "title", "required": true, "dataType": "string" },
+        content: { "in": "formData", "name": "content", "required": true, "dataType": "string" },
+        categoryId: { "in": "formData", "name": "categoryId", "required": true, "dataType": "string" },
+        category: { "in": "formData", "name": "category", "required": true, "dataType": "string" },
+        tags: { "in": "formData", "name": "tags", "required": true, "dataType": "string" },
+        imageUrl: { "in": "formData", "name": "imageUrl", "required": true, "dataType": "string" },
+        videoUrl: { "in": "formData", "name": "videoUrl", "required": true, "dataType": "string" },
+        published: { "in": "formData", "name": "published", "required": true, "dataType": "string" },
+        publishedAt: { "in": "formData", "name": "publishedAt", "required": true, "dataType": "string" },
+        authorId: { "in": "formData", "name": "authorId", "required": true, "dataType": "string" },
+        embedUrl: { "in": "formData", "name": "embedUrl", "required": true, "dataType": "string" },
+        isPublished: { "in": "formData", "name": "isPublished", "required": true, "dataType": "string" },
+        files: { "in": "formData", "name": "files", "dataType": "array", "array": { "dataType": "file" } },
+    };
+    app.patch('/api/v1/post/:id', authenticateMiddleware([{ "jwt": [] }]), upload.fields([
+        {
+            name: "files",
+        }
+    ]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.updatePost)), async function PostController_updatePost(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_updatePost, request, response });
+            const controller = new PostController();
+            await templateService.apiHandler({
+                methodName: 'updatePost',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsPostController_toggleLike = {
+        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        body: { "in": "body", "name": "body", "required": true, "ref": "EmojiInput" },
+    };
+    app.post('/api/v1/post/:id/like', authenticateMiddleware([{ "jwt": [] }]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.toggleLike)), async function PostController_toggleLike(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_toggleLike, request, response });
+            const controller = new PostController();
+            await templateService.apiHandler({
+                methodName: 'toggleLike',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsPostController_createComment = {
+        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
+        body: { "in": "body", "name": "body", "required": true, "ref": "CommentInput" },
+    };
+    app.post('/api/v1/post/:id/comment', authenticateMiddleware([{ "jwt": [] }]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.createComment)), async function PostController_createComment(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_createComment, request, response });
+            const controller = new PostController();
+            await templateService.apiHandler({
+                methodName: 'createComment',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     const argsUserController_updateUserProfile = {
         req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
         body: { "in": "body", "name": "body", "required": true, "ref": "UserEditInput" },
@@ -246,276 +523,6 @@ export function RegisterRoutes(app, opts) {
             const controller = new UserController();
             await templateService.apiHandler({
                 methodName: 'followUser',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsPostController_createPost = {
-        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-        title: { "in": "formData", "name": "title", "required": true, "dataType": "string" },
-        content: { "in": "formData", "name": "content", "required": true, "dataType": "string" },
-        tags: { "in": "formData", "name": "tags", "dataType": "string" },
-        category: { "in": "formData", "name": "category", "dataType": "string" },
-        markdown: { "in": "formData", "name": "markdown", "dataType": "string" },
-        videoUrl: { "in": "formData", "name": "videoUrl", "dataType": "string" },
-        imageUrl: { "in": "formData", "name": "imageUrl", "dataType": "string" },
-        embedUrl: { "in": "formData", "name": "embedUrl", "dataType": "string" },
-        isPublished: { "in": "formData", "name": "isPublished", "dataType": "string" },
-        publishedAt: { "in": "formData", "name": "publishedAt", "dataType": "string" },
-        files: { "in": "formData", "name": "files", "dataType": "array", "array": { "dataType": "file" } },
-    };
-    app.post('/api/v1/post/create', authenticateMiddleware([{ "jwt": [] }]), upload.fields([
-        {
-            name: "files",
-        }
-    ]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.createPost)), async function PostController_createPost(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_createPost, request, response });
-            const controller = new PostController();
-            await templateService.apiHandler({
-                methodName: 'createPost',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsPostController_getPosts = {
-        skip: { "default": 0, "in": "query", "name": "skip", "dataType": "double" },
-        limit: { "default": 10, "in": "query", "name": "limit", "dataType": "double" },
-    };
-    app.get('/api/v1/post', ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.getPosts)), async function PostController_getPosts(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_getPosts, request, response });
-            const controller = new PostController();
-            await templateService.apiHandler({
-                methodName: 'getPosts',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsPostController_deletePost = {
-        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-    };
-    app.delete('/api/v1/post/:id', authenticateMiddleware([{ "jwt": [] }]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.deletePost)), async function PostController_deletePost(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_deletePost, request, response });
-            const controller = new PostController();
-            await templateService.apiHandler({
-                methodName: 'deletePost',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsPostController_updatePost = {
-        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-        title: { "in": "formData", "name": "title", "dataType": "string" },
-        content: { "in": "formData", "name": "content", "dataType": "string" },
-        tags: { "in": "formData", "name": "tags", "dataType": "string" },
-        category: { "in": "formData", "name": "category", "dataType": "string" },
-        markdown: { "in": "formData", "name": "markdown", "dataType": "string" },
-        videoUrl: { "in": "formData", "name": "videoUrl", "dataType": "string" },
-        imageUrl: { "in": "formData", "name": "imageUrl", "dataType": "string" },
-        embedUrl: { "in": "formData", "name": "embedUrl", "dataType": "string" },
-        files: { "in": "formData", "name": "files", "dataType": "array", "array": { "dataType": "file" } },
-    };
-    app.patch('/api/v1/post/:id', authenticateMiddleware([{ "jwt": [] }]), upload.fields([
-        {
-            name: "files",
-        }
-    ]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.updatePost)), async function PostController_updatePost(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_updatePost, request, response });
-            const controller = new PostController();
-            await templateService.apiHandler({
-                methodName: 'updatePost',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsPostController_toggleLike = {
-        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-        body: { "in": "body", "name": "body", "required": true, "ref": "EmojiInput" },
-    };
-    app.post('/api/v1/post/:id/like', authenticateMiddleware([{ "jwt": [] }]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.toggleLike)), async function PostController_toggleLike(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_toggleLike, request, response });
-            const controller = new PostController();
-            await templateService.apiHandler({
-                methodName: 'toggleLike',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsPostController_createComment = {
-        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-        id: { "in": "path", "name": "id", "required": true, "dataType": "string" },
-        body: { "in": "body", "name": "body", "required": true, "ref": "CommentInput" },
-    };
-    app.post('/api/v1/post/:id/comment', authenticateMiddleware([{ "jwt": [] }]), ...(fetchMiddlewares(PostController)), ...(fetchMiddlewares(PostController.prototype.createComment)), async function PostController_createComment(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsPostController_createComment, request, response });
-            const controller = new PostController();
-            await templateService.apiHandler({
-                methodName: 'createComment',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsJoinWaitListController_submitWaitListForm = {
-        body: { "in": "body", "name": "body", "required": true, "dataType": "nestedObjectLiteral", "nestedProperties": { "email": { "dataType": "string", "required": true }, "name": { "dataType": "string", "required": true } } },
-    };
-    app.post('/api/v1/join-waitlist/submit', ...(fetchMiddlewares(JoinWaitListController)), ...(fetchMiddlewares(JoinWaitListController.prototype.submitWaitListForm)), async function JoinWaitListController_submitWaitListForm(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsJoinWaitListController_submitWaitListForm, request, response });
-            const controller = new JoinWaitListController();
-            await templateService.apiHandler({
-                methodName: 'submitWaitListForm',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsAuthController_registerUser = {
-        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-        files: { "in": "formData", "name": "files", "dataType": "array", "array": { "dataType": "file" } },
-    };
-    app.post('/api/v1/auth/register', upload.fields([
-        {
-            name: "files",
-        }
-    ]), ...(fetchMiddlewares(AuthController)), ...(fetchMiddlewares(AuthController.prototype.registerUser)), async function AuthController_registerUser(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsAuthController_registerUser, request, response });
-            const controller = new AuthController();
-            await templateService.apiHandler({
-                methodName: 'registerUser',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsAuthController_loginUser = {
-        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-    };
-    app.post('/api/v1/auth/login', ...(fetchMiddlewares(AuthController)), ...(fetchMiddlewares(AuthController.prototype.loginUser)), async function AuthController_loginUser(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsAuthController_loginUser, request, response });
-            const controller = new AuthController();
-            await templateService.apiHandler({
-                methodName: 'loginUser',
-                controller,
-                response,
-                next,
-                validatedArgs,
-                successStatus: undefined,
-            });
-        }
-        catch (err) {
-            return next(err);
-        }
-    });
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    const argsAuthController_logoutUser = {
-        req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
-    };
-    app.post('/api/v1/auth/logout', authenticateMiddleware([{ "jwt": [] }]), ...(fetchMiddlewares(AuthController)), ...(fetchMiddlewares(AuthController.prototype.logoutUser)), async function AuthController_logoutUser(request, response, next) {
-        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        let validatedArgs = [];
-        try {
-            validatedArgs = templateService.getValidatedArgs({ args: argsAuthController_logoutUser, request, response });
-            const controller = new AuthController();
-            await templateService.apiHandler({
-                methodName: 'logoutUser',
                 controller,
                 response,
                 next,

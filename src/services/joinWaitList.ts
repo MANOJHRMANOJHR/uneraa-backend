@@ -4,7 +4,7 @@ import ApiResponse from '../utils/api-response.js';
 import ApiError from '../utils/api-error.js';
 import { StatusCode } from '../constants/statusCode.js';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { userJoinWaitListSchema } from './constrollersSchema.js';
+import { userJoinWaitListSchema } from './user/schema.js';
 
 @Route('join-waitlist')
 @Tags('JoinWaitList')

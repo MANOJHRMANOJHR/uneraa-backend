@@ -14,11 +14,11 @@ import {
   UploadedFiles,
   FormField,
 } from 'tsoa';
-import { EmojiInput, CommentInput } from './constrollersSchema.js';
-import ApiResponse from '../utils/api-response.js';
+import { EmojiInput, CommentInput } from './types.js';
+import ApiResponse from '../../utils/api-response.js';
 
 // import { postQueue } from '../utils/jobs/postQueue.js';
-import { AuthenticatedRequest } from './types/user.type.js';
+import { AuthenticatedRequest } from './types.js';
 import {
   CreateComment,
   CreatePost,
@@ -26,7 +26,7 @@ import {
   GetPost,
   PostLikeUnlike,
   UpdatePost,
-} from '../services/post/handler/post.js';
+} from './handler/post.js';
 
 @Route('post')
 @Tags('Post')
@@ -38,16 +38,19 @@ export class PostController extends Controller {
   @Security('jwt')
   public async createPost(
     @Request() req: AuthenticatedRequest,
+    @FormField() id: string,
     @FormField() title: string,
     @FormField() content: string,
-    @FormField() tags?: string,
-    @FormField() category?: string,
-    @FormField() markdown?: string,
-    @FormField() videoUrl?: string,
-    @FormField() imageUrl?: string,
-    @FormField() embedUrl?: string,
-    @FormField() isPublished?: boolean,
-    @FormField() publishedAt?: Date,
+    @FormField() categoryId: string,
+    @FormField() category: string,
+    @FormField() tags: string,
+    @FormField() imageUrl: string,
+    @FormField() videoUrl: string,
+    @FormField() published: boolean,
+    @FormField() publishedAt: Date | null,
+    @FormField() authorId: string,
+    @FormField() embedUrl: string,
+    @FormField() isPublished: boolean,
     @UploadedFiles()
     files?: {
       image?: Express.Multer.File[];
@@ -56,16 +59,21 @@ export class PostController extends Controller {
   ): Promise<ApiResponse<any>> {
     return await CreatePost(
       req,
-      title,
-      content,
-      tags,
-      category,
-      markdown,
-      videoUrl,
-      imageUrl,
-      embedUrl,
-      isPublished,
-      publishedAt,
+      {
+        id: '',
+        title: title ?? '',
+        content: content ?? '',
+        categoryId: categoryId ?? '',
+        category: category ?? '',
+        tags: tags ?? [],
+        imageUrl: imageUrl ?? '',
+        videoUrl: videoUrl ?? '',
+        published: published ?? false,
+        publishedAt: publishedAt ?? null,
+        authorId: authorId ?? '',
+        embedUrl: embedUrl ?? '',
+        isPublished: isPublished ?? false,
+      },
       files
     );
   }
@@ -91,15 +99,19 @@ export class PostController extends Controller {
   @Security('jwt')
   public async updatePost(
     @Request() req: AuthenticatedRequest,
-    @Path() id: string,
-    @FormField() title?: string,
-    @FormField() content?: string,
-    @FormField() tags?: string,
-    @FormField() category?: string,
-    @FormField() markdown?: string,
-    @FormField() videoUrl?: string,
-    @FormField() imageUrl?: string,
-    @FormField() embedUrl?: string,
+    @FormField() id: string,
+    @FormField() title: string,
+    @FormField() content: string,
+    @FormField() categoryId: string,
+    @FormField() category: string,
+    @FormField() tags: string,
+    @FormField() imageUrl: string,
+    @FormField() videoUrl: string,
+    @FormField() published: boolean,
+    @FormField() publishedAt: Date | null,
+    @FormField() authorId: string,
+    @FormField() embedUrl: string,
+    @FormField() isPublished: boolean,
     @UploadedFiles()
     files?: {
       image?: Express.Multer.File[];
@@ -108,15 +120,21 @@ export class PostController extends Controller {
   ): Promise<ApiResponse<any>> {
     return await UpdatePost(
       req,
-      id,
-      title,
-      content,
-      tags,
-      category,
-      markdown,
-      videoUrl,
-      imageUrl,
-      embedUrl,
+      {
+        id: '',
+        title: title ?? '',
+        content: content ?? '',
+        categoryId: categoryId ?? '',
+        category: category ?? '',
+        tags: tags ?? [],
+        imageUrl: imageUrl ?? '',
+        videoUrl: videoUrl ?? '',
+        published: published ?? false,
+        publishedAt: publishedAt ?? null,
+        authorId: authorId ?? '',
+        embedUrl: embedUrl ?? '',
+        isPublished: isPublished ?? false,
+      },
       files
     );
   }

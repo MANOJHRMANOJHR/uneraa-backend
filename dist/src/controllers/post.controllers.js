@@ -10,14 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Controller, Post, Get, Delete, Patch, Route, Tags, Security, Request, Body, Path, Query, UploadedFiles, FormField, } from 'tsoa';
+import { Controller, Post, Get, Delete, Patch, Route, Tags, Security, Request, Body, Path, Query, UploadedFiles, } from 'tsoa';
 import { CreateComment, CreatePost, DeletePost, GetPost, PostLikeUnlike, UpdatePost, } from '../services/post/handler/post.js';
 let PostController = class PostController extends Controller {
     /**
      * Create a new post
      */
-    async createPost(req, title, content, tags, category, markdown, videoUrl, imageUrl, embedUrl, isPublished, publishedAt, files) {
-        return await CreatePost(req, title, content, tags, category, markdown, videoUrl, imageUrl, embedUrl, isPublished, publishedAt, files);
+    async createPost(req, body, files) {
+        return await CreatePost(req, body, files);
     }
     async getPosts(skip = 0, limit = 10) {
         return await GetPost(skip, limit);
@@ -25,8 +25,8 @@ let PostController = class PostController extends Controller {
     async deletePost(req, id) {
         return await DeletePost(req, id);
     }
-    async updatePost(req, id, title, content, tags, category, markdown, videoUrl, imageUrl, embedUrl, files) {
-        return await UpdatePost(req, id, title, content, tags, category, markdown, videoUrl, imageUrl, embedUrl, files);
+    async updatePost(req, body, files) {
+        return await UpdatePost(req, body, files);
     }
     async toggleLike(req, id, body) {
         return await PostLikeUnlike(req, id, body);
@@ -39,19 +39,10 @@ __decorate([
     Post('create'),
     Security('jwt'),
     __param(0, Request()),
-    __param(1, FormField()),
-    __param(2, FormField()),
-    __param(3, FormField()),
-    __param(4, FormField()),
-    __param(5, FormField()),
-    __param(6, FormField()),
-    __param(7, FormField()),
-    __param(8, FormField()),
-    __param(9, FormField()),
-    __param(10, FormField()),
-    __param(11, UploadedFiles()),
+    __param(1, Body()),
+    __param(2, UploadedFiles()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String, String, String, String, String, String, String, Boolean, Date, Object]),
+    __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "createPost", null);
 __decorate([
@@ -75,18 +66,10 @@ __decorate([
     Patch('{id}'),
     Security('jwt'),
     __param(0, Request()),
-    __param(1, Path()),
-    __param(2, FormField()),
-    __param(3, FormField()),
-    __param(4, FormField()),
-    __param(5, FormField()),
-    __param(6, FormField()),
-    __param(7, FormField()),
-    __param(8, FormField()),
-    __param(9, FormField()),
-    __param(10, UploadedFiles()),
+    __param(1, Body()),
+    __param(2, UploadedFiles()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String, String, String, String, String, String, String, String, String, Object]),
+    __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "updatePost", null);
 __decorate([

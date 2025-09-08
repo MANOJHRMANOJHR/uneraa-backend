@@ -85,11 +85,10 @@ export type UserPostInput = {
   imageUrl: string;
   videoUrl: string;
   published: boolean;
-  publishedAt: string;
+  publishedAt: Date | null;
   authorId: string;
   embedUrl: string;
   isPublished: boolean;
-
 };
 export type EmojiInput = {
   emoji: EmojiType;

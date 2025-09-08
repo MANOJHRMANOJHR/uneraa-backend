@@ -2,7 +2,11 @@
   "entryFile": "server.ts",
   "authenticationModule": "./src/middleware/auth.middleware.ts",
   "noImplicitAdditionalProperties": "throw-on-extras",
-  "controllerPathGlobs": ["src/controllers/*.ts"],
+  "controllerPathGlobs": [
+    "src/services/*.ts",
+    "src/services/post/*.ts",
+    "src/services/user/*.ts"
+  ],
   "spec": {
     "outputDirectory": "src/docs",
     "specVersion": 3,

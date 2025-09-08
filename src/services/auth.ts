@@ -12,12 +12,8 @@ import { Request as ExpressRequest } from 'express';
 import ApiError from '../utils/api-error.js';
 import ApiResponse from '../utils/api-response.js';
 import { StatusCode } from '../constants/statusCode.js';
-import { AuthenticatedRequest } from './types/user.type.js';
-import {
-  LoginUser,
-  LogoutUser,
-  RegisterUser,
-} from '../services/user/handler/auth.js';
+import { AuthenticatedRequest } from './user/types.js';
+import { LoginUser, LogoutUser, RegisterUser } from './user/handler/auth.js';
 
 @Route('auth')
 @Tags('Auth')

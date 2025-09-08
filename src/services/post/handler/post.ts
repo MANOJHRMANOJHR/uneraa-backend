@@ -1,6 +1,11 @@
 import prisma from '../../../lib/prisma.js';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { EmojiType, EmojiInput, CommentInput, UserPostInput } from '../types.js';
+import {
+  EmojiType,
+  EmojiInput,
+  CommentInput,
+  UserPostInput,
+} from '../types.js';
 import ApiResponse from '../../../utils/api-response.js';
 import ApiError from '../../../utils/api-error.js';
 import { StatusCode } from '../../../constants/statusCode.js';
@@ -103,10 +108,10 @@ export const GetPost = async (skip: number, limit: number) => {
 export const DeletePost = async (req: AuthenticatedRequest, id: string) => {
   try {
     const post = await getPostOrThrow({
-      where: {id},
-      select: {id: true, authorId: true,},
-      unique: true
-      });
+      where: { id },
+      select: { id: true, authorId: true },
+      unique: true,
+    });
     if (post.authorId !== req.user?.id) {
       throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
     }
@@ -124,10 +129,10 @@ export const UpdatePost = async (
   files?: { image?: Express.Multer.File[]; video?: Express.Multer.File[] }
 ) => {
   const post = await getPostOrThrow({
-    where: {id: body.id},
-    select: {id: true, authorId: true,},
-    unique: true
-    });
+    where: { id: body.id },
+    select: { id: true, authorId: true },
+    unique: true,
+  });
   if (post.authorId !== req.user?.id) {
     throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
   }
@@ -149,11 +154,11 @@ export const UpdatePost = async (
     ...(parsedTags && {
       tags: { set: [], create: parsedTags.map((name) => ({ name })) },
     }),
-    ...((imageUrlOnCloudinary) && {
-      imageUrl: imageUrlOnCloudinary ,
+    ...(imageUrlOnCloudinary && {
+      imageUrl: imageUrlOnCloudinary,
     }),
-    ...((videoUrlOnCloudinary) && {
-      videoUrl: videoUrlOnCloudinary ,
+    ...(videoUrlOnCloudinary && {
+      videoUrl: videoUrlOnCloudinary,
     }),
     ...(body.embedUrl && { embedUrl: body.embedUrl }),
     ...(body.category && { category: { connect: { id: body.category } } }),
@@ -180,11 +185,11 @@ export const PostLikeUnlike = async (
   }
 
   try {
-     await getPostOrThrow({
-      where: {id: id},
-      select: {id: true, authorId: true,},
-      unique: true
-      });
+    await getPostOrThrow({
+      where: { id },
+      select: { id: true, authorId: true },
+      unique: true,
+    });
 
     const existing = await prisma.like.findFirst({
       where: { postId: id, userId: currentUserId },
@@ -222,11 +227,11 @@ export const CreateComment = async (
   const { content, parentId } = body;
 
   try {
-     await getPostOrThrow({
-      where: {id: id},
-      select: {id: true, authorId: true,},
-      unique: true
-      });
+    await getPostOrThrow({
+      where: { id },
+      select: { id: true, authorId: true },
+      unique: true,
+    });
 
     const comment = await prisma.comment.create({
       data: {
