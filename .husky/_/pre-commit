@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/h"
+
+npm run typecheck
+npm run format
+npm run lint
+npm run build
