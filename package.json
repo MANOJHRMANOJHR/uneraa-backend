@@ -19,6 +19,7 @@
     "lint": "eslint . --ext .ts,.tsx --fix",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
+    "formating:dev": "npm run typecheck && npm run format && npm run lint ",
     "prepare": "husky install",
     "postinstall": "npm run prepare"
   },

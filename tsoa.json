@@ -5,7 +5,8 @@
   "controllerPathGlobs": [
     "src/services/*.ts",
     "src/services/post/*.ts",
-    "src/services/user/*.ts"
+    "src/services/user/*.ts",
+    "src/services/forum/*.ts"
   ],
   "spec": {
     "outputDirectory": "src/docs",
