@@ -7,6 +7,8 @@ import { AuthController } from './../services/auth.js';
 import { PostController } from './../services/post/index.js';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UserController } from './../services/user/index.js';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { ForumController } from './../services/forum/index.js';
 import { expressAuthentication } from './../middleware/auth.middleware.js';
 import multer from 'multer';
 const expressAuthenticationRecasted = expressAuthentication;
@@ -319,6 +321,92 @@ const models = {
             },
             validators: {},
         },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    ForumResponse: {
+        dataType: 'refAlias',
+        type: {
+            dataType: 'nestedObjectLiteral',
+            nestedProperties: {
+                createdById: { dataType: 'string', required: true },
+                updatedAt: { dataType: 'datetime', required: true },
+                createdAt: { dataType: 'datetime', required: true },
+                description: { dataType: 'string', required: true },
+                title: { dataType: 'string', required: true },
+                id: { dataType: 'string', required: true },
+            },
+            validators: {},
+        },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    ApiResponse_ForumResponse_: {
+        dataType: 'refObject',
+        properties: {
+            statusCode: { dataType: 'double', required: true },
+            status: { dataType: 'boolean', required: true },
+            message: { dataType: 'string', required: true },
+            data: {
+                dataType: 'union',
+                subSchemas: [
+                    { ref: 'ForumResponse' },
+                    { dataType: 'enum', enums: [null] },
+                ],
+                required: true,
+            },
+        },
+        additionalProperties: false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    ForumInput: {
+        dataType: 'refObject',
+        properties: {
+            title: { dataType: 'string', required: true },
+            description: { dataType: 'string', required: true },
+        },
+        additionalProperties: false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    ForumUpdateInput: {
+        dataType: 'refObject',
+        properties: {
+            title: { dataType: 'string' },
+            description: { dataType: 'string' },
+        },
+        additionalProperties: false,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    ForumSummaryResponse: {
+        dataType: 'refAlias',
+        type: {
+            dataType: 'nestedObjectLiteral',
+            nestedProperties: {
+                createdAt: { dataType: 'datetime', required: true },
+                title: { dataType: 'string', required: true },
+                id: { dataType: 'string', required: true },
+            },
+            validators: {},
+        },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    'ApiResponse_ForumSummaryResponse-Array_': {
+        dataType: 'refObject',
+        properties: {
+            statusCode: { dataType: 'double', required: true },
+            status: { dataType: 'boolean', required: true },
+            message: { dataType: 'string', required: true },
+            data: {
+                dataType: 'union',
+                subSchemas: [
+                    {
+                        dataType: 'array',
+                        array: { dataType: 'refAlias', ref: 'ForumSummaryResponse' },
+                    },
+                    { dataType: 'enum', enums: [null] },
+                ],
+                required: true,
+            },
+        },
+        additionalProperties: false,
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 };
@@ -916,6 +1004,161 @@ export function RegisterRoutes(app, opts) {
             const controller = new UserController();
             await templateService.apiHandler({
                 methodName: 'followUser',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsForumController_createForum = {
+        req: { in: 'request', name: 'req', required: true, dataType: 'object' },
+        body: { in: 'body', name: 'body', required: true, ref: 'ForumInput' },
+    };
+    app.post('/api/v1/forums', authenticateMiddleware([{ jwt: [] }]), ...fetchMiddlewares(ForumController), ...fetchMiddlewares(ForumController.prototype.createForum), async function ForumController_createForum(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({
+                args: argsForumController_createForum,
+                request,
+                response,
+            });
+            const controller = new ForumController();
+            await templateService.apiHandler({
+                methodName: 'createForum',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsForumController_updateForum = {
+        req: { in: 'request', name: 'req', required: true, dataType: 'object' },
+        forumId: {
+            in: 'path',
+            name: 'forumId',
+            required: true,
+            dataType: 'string',
+        },
+        body: { in: 'body', name: 'body', required: true, ref: 'ForumUpdateInput' },
+    };
+    app.patch('/api/v1/forums/:forumId', authenticateMiddleware([{ jwt: [] }]), ...fetchMiddlewares(ForumController), ...fetchMiddlewares(ForumController.prototype.updateForum), async function ForumController_updateForum(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({
+                args: argsForumController_updateForum,
+                request,
+                response,
+            });
+            const controller = new ForumController();
+            await templateService.apiHandler({
+                methodName: 'updateForum',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsForumController_deleteForum = {
+        req: { in: 'request', name: 'req', required: true, dataType: 'object' },
+        forumId: {
+            in: 'path',
+            name: 'forumId',
+            required: true,
+            dataType: 'string',
+        },
+    };
+    app.delete('/api/v1/forums/:forumId', authenticateMiddleware([{ jwt: [] }]), ...fetchMiddlewares(ForumController), ...fetchMiddlewares(ForumController.prototype.deleteForum), async function ForumController_deleteForum(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({
+                args: argsForumController_deleteForum,
+                request,
+                response,
+            });
+            const controller = new ForumController();
+            await templateService.apiHandler({
+                methodName: 'deleteForum',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsForumController_getForumById = {
+        forumId: {
+            in: 'path',
+            name: 'forumId',
+            required: true,
+            dataType: 'string',
+        },
+    };
+    app.get('/api/v1/forums/:forumId', ...fetchMiddlewares(ForumController), ...fetchMiddlewares(ForumController.prototype.getForumById), async function ForumController_getForumById(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({
+                args: argsForumController_getForumById,
+                request,
+                response,
+            });
+            const controller = new ForumController();
+            await templateService.apiHandler({
+                methodName: 'getForumById',
+                controller,
+                response,
+                next,
+                validatedArgs,
+                successStatus: undefined,
+            });
+        }
+        catch (err) {
+            return next(err);
+        }
+    });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    const argsForumController_getForums = {
+        limit: { default: 10, in: 'query', name: 'limit', dataType: 'double' },
+        skip: { default: 0, in: 'query', name: 'skip', dataType: 'double' },
+    };
+    app.get('/api/v1/forums', ...fetchMiddlewares(ForumController), ...fetchMiddlewares(ForumController.prototype.getForums), async function ForumController_getForums(request, response, next) {
+        // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+        let validatedArgs = [];
+        try {
+            validatedArgs = templateService.getValidatedArgs({
+                args: argsForumController_getForums,
+                request,
+                response,
+            });
+            const controller = new ForumController();
+            await templateService.apiHandler({
+                methodName: 'getForums',
                 controller,
                 response,
                 next,
