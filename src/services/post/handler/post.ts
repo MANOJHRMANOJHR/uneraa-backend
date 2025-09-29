@@ -1,6 +1,11 @@
 import prisma from '../../../lib/prisma.js';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { EmojiType, EmojiInput, CommentInput } from '../schema.js';
+import {
+  EmojiType,
+  EmojiInput,
+  CommentInput,
+  UserPostInput,
+} from '../types.js';
 import ApiResponse from '../../../utils/api-response.js';
 import ApiError from '../../../utils/api-error.js';
 import { StatusCode } from '../../../constants/statusCode.js';
@@ -16,21 +21,12 @@ import {
 
 export const CreatePost = async (
   req: AuthenticatedRequest,
-  title: string,
-  content: string,
-  tags?: string,
-  category?: string,
-  markdown?: string,
-  videoUrl?: string,
-  imageUrl?: string,
-  embedUrl?: string,
-  isPublished?: boolean,
-  publishedAt?: Date,
+  body: UserPostInput,
   files?: { image?: Express.Multer.File[]; video?: Express.Multer.File[] }
 ) => {
   const currentUserId = getUserId(req);
 
-  const parsedTags = parseTags(tags);
+  const parsedTags = parseTags(body.tags);
 
   const imageUrlOnCloudinary = await handleFileUpload(
     files?.image?.[0],
@@ -47,18 +43,17 @@ export const CreatePost = async (
       : undefined;
 
   const data = {
-    title,
-    content,
+    title: body.title,
+    content: body.content,
     ...(tagsData && { tags: tagsData }),
-    imageUrl: imageUrlOnCloudinary || imageUrl || '',
-    markdown: markdown || '',
+    imageUrl: imageUrlOnCloudinary || body.imageUrl || '',
     author: { connect: { id: currentUserId } },
-    videoUrl: videoUrlOnCloudinary || videoUrl || '',
-    embedUrl: embedUrl || '',
-    published: isPublished || false,
-    publishedAt: publishedAt ? new Date(publishedAt) : null,
-    ...(category && {
-      category: { connect: { id: category } },
+    videoUrl: videoUrlOnCloudinary || body.videoUrl || '',
+    embedUrl: body.embedUrl || '',
+    published: body.isPublished || false,
+    publishedAt: body.publishedAt ? new Date(body.publishedAt) : null,
+    ...(body.category && {
+      category: { connect: { id: body.category } },
     }),
   };
 
@@ -112,7 +107,11 @@ export const GetPost = async (skip: number, limit: number) => {
 
 export const DeletePost = async (req: AuthenticatedRequest, id: string) => {
   try {
-    const post = await getPostOrThrow(id);
+    const post = await getPostOrThrow({
+      where: { id },
+      select: { id: true, authorId: true },
+      unique: true,
+    });
     if (post.authorId !== req.user?.id) {
       throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
     }
@@ -126,23 +125,19 @@ export const DeletePost = async (req: AuthenticatedRequest, id: string) => {
 
 export const UpdatePost = async (
   req: AuthenticatedRequest,
-  id: string,
-  title?: string,
-  content?: string,
-  tags?: string,
-  category?: string,
-  markdown?: string,
-  videoUrl?: string,
-  imageUrl?: string,
-  embedUrl?: string,
+  body: UserPostInput,
   files?: { image?: Express.Multer.File[]; video?: Express.Multer.File[] }
 ) => {
-  const post = await getPostOrThrow(id);
+  const post = await getPostOrThrow({
+    where: { id: body.id },
+    select: { id: true, authorId: true },
+    unique: true,
+  });
   if (post.authorId !== req.user?.id) {
     throw new ApiError(StatusCode.UNAUTHORIZED, 'Unauthorized');
   }
 
-  const parsedTags = parseTags(tags);
+  const parsedTags = parseTags(body.tags);
 
   const imageUrlOnCloudinary = await handleFileUpload(
     files?.image?.[0],
@@ -154,24 +149,23 @@ export const UpdatePost = async (
   );
 
   const data = {
-    ...(title && { title }),
-    ...(content && { content }),
+    ...(body.title && { title: body.title }),
+    ...(body.content && { content: body.content }),
     ...(parsedTags && {
       tags: { set: [], create: parsedTags.map((name) => ({ name })) },
     }),
-    ...(markdown && { markdown }),
-    ...((imageUrlOnCloudinary || imageUrl) && {
-      imageUrl: imageUrlOnCloudinary || imageUrl,
+    ...(imageUrlOnCloudinary && {
+      imageUrl: imageUrlOnCloudinary,
     }),
-    ...((videoUrlOnCloudinary || videoUrl) && {
-      videoUrl: videoUrlOnCloudinary || videoUrl,
+    ...(videoUrlOnCloudinary && {
+      videoUrl: videoUrlOnCloudinary,
     }),
-    ...(embedUrl && { embedUrl }),
-    ...(category && { category: { connect: { id: category } } }),
+    ...(body.embedUrl && { embedUrl: body.embedUrl }),
+    ...(body.category && { category: { connect: { id: body.category } } }),
   };
 
   try {
-    const updated = await prisma.post.update({ where: { id }, data });
+    const updated = await prisma.post.update({ where: { id: body.id }, data });
     return new ApiResponse(StatusCode.OK, true, 'Post updated', updated);
   } catch (error) {
     return handlePrismaError(error);
@@ -191,7 +185,11 @@ export const PostLikeUnlike = async (
   }
 
   try {
-    await getPostOrThrow(id);
+    await getPostOrThrow({
+      where: { id },
+      select: { id: true, authorId: true },
+      unique: true,
+    });
 
     const existing = await prisma.like.findFirst({
       where: { postId: id, userId: currentUserId },
@@ -229,7 +227,11 @@ export const CreateComment = async (
   const { content, parentId } = body;
 
   try {
-    await getPostOrThrow(id);
+    await getPostOrThrow({
+      where: { id },
+      select: { id: true, authorId: true },
+      unique: true,
+    });
 
     const comment = await prisma.comment.create({
       data: {

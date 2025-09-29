@@ -1,9 +1,10 @@
-import { AuthenticatedRequest } from '../controllers/types/user.type.js';
+import { AuthenticatedRequest } from '../services/user/types.js';
 import ApiError from './api-error.js';
 import { StatusCode } from '../constants/statusCode.js';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library.js';
 import { uploadOnCloudinary } from './cloudinary.js';
 import prisma from '../lib/prisma.js';
+import { Prisma } from '@prisma/client';
 
 export function getUserId(req: AuthenticatedRequest): string {
   if (!req.user?.id) {
@@ -12,11 +13,24 @@ export function getUserId(req: AuthenticatedRequest): string {
   return req.user.id;
 }
 
-export async function getPostOrThrow(id: string) {
-  const post = await prisma.post.findUnique({
-    where: { id },
-    select: { id: true, authorId: true },
-  });
+type GetPostOptions<T extends Prisma.PostSelect> = {
+  where: Prisma.PostWhereInput; // filter (id, slug, published, etc.)
+  select: T;
+  unique?: boolean; // if unique query (id/slug),  true
+};
+
+export async function getPostOrThrow<T extends Prisma.PostSelect>({
+  where,
+  select,
+  unique = false,
+}: GetPostOptions<T>): Promise<Prisma.PostGetPayload<{ select: T }>> {
+  const post = unique
+    ? await prisma.post.findUnique({
+        where: where as Prisma.PostWhereUniqueInput,
+        select,
+      })
+    : await prisma.post.findFirst({ where, select });
+
   if (!post) throw new ApiError(StatusCode.NOT_FOUND, 'Post not found');
   return post;
 }

@@ -1,11 +1,5 @@
 import z from 'zod';
-
-export enum EmojiType {
-  LIKE = 'like',
-  LAUGH = 'laugh',
-  CRY = 'cry',
-  ANGRY = 'angry',
-}
+import { EmojiType } from './types';
 
 export const userRegisterSchema = z.object({
   name: z.string().min(2).max(20),
@@ -62,37 +56,3 @@ export const userFollowerSchema = z.object({
   followingId: z.string(),
   followerId: z.string(),
 });
-
-export type UserEditInput = {
-  name?: string;
-  email?: string;
-  bio?: string;
-  username?: string;
-  portfolioLink?: string;
-};
-
-export type UserFollowerInput = {
-  followingId: string;
-  followerId: string;
-};
-
-export type UserPostInput = {
-  title: string;
-  content: string;
-  categoryId: string;
-  tags: string[];
-  image: string;
-  video: string;
-  published: boolean;
-  publishedAt: string;
-  authorId: string;
-};
-export type EmojiInput = {
-  emoji: EmojiType;
-};
-export type CommentInput = {
-  content: string;
-  postId: string;
-  authorId: string;
-  parentId?: string;
-};

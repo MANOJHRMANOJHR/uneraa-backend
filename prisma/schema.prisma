@@ -46,6 +46,8 @@ model User {
   bookmarks      Bookmark[] @relation("UserBookmarks")
   blockedUsers   Block[]    @relation("userBlocked")
   blockedByUsers Block[]    @relation("userBlockedBy")
+  createdForums  Forum[]    @relation("CreatedForums")
+  joinedForums   Forum[]    @relation("ForumMembers")
   isOnline       Boolean    @default(true)
   lastActiveAt   DateTime   @default(now())
   isObsolete     Boolean    @default(false)
@@ -86,8 +88,8 @@ model Post {
   comments    Comment[]  @relation("PostComments")
   savedBy     User[]     @relation("UserSavedPosts")
   tags        Tag[]      @relation("PostTags")
-  categoryId String?                  
-  category   Category? @relation("PostCategory", fields: [categoryId], references: [id])
+  categoryId  String?
+  category    Category?  @relation("PostCategory", fields: [categoryId], references: [id])
   bookmarks   Bookmark[] @relation("PostBookmarks")
   draft       Boolean    @default(true)
 }
@@ -155,4 +157,19 @@ model Follow {
   createdAt   DateTime @default(now())
 
   @@unique([followerId, followingId])
+}
+
+model Forum {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // relations
+  createdBy   User    @relation("CreatedForums", fields: [createdById], references: [id])
+  createdById String
+  members     User[]  @relation("ForumMembers")
+  // soft delete flag (if needed)
+  isDeleted   Boolean @default(false)
 }

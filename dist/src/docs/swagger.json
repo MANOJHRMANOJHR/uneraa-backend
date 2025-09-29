@@ -7,6 +7,125 @@
         "requestBodies": {},
         "responses": {},
         "schemas": {
+            "ApiResponse_string_": {
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "status": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "required": ["statusCode", "status", "message", "data"],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ApiError": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "stack": {
+                        "type": "string"
+                    },
+                    "statusCode": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "errors": {
+                        "items": {},
+                        "type": "array",
+                        "default": []
+                    }
+                },
+                "required": ["name", "message", "statusCode"],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ApiResponse_any_": {
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "status": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "nullable": true
+                    }
+                },
+                "required": ["statusCode", "status", "message", "data"],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ApiResponse____": {
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "status": {
+                        "type": "boolean"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "data": {
+                        "properties": {},
+                        "type": "object",
+                        "nullable": true
+                    }
+                },
+                "required": ["statusCode", "status", "message", "data"],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "EmojiType": {
+                "enum": ["like", "laugh", "cry", "angry"],
+                "type": "string"
+            },
+            "EmojiInput": {
+                "properties": {
+                    "emoji": {
+                        "$ref": "#/components/schemas/EmojiType"
+                    }
+                },
+                "required": ["emoji"],
+                "type": "object"
+            },
+            "CommentInput": {
+                "properties": {
+                    "parentId": {
+                        "type": "string"
+                    },
+                    "authorId": {
+                        "type": "string"
+                    },
+                    "postId": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    }
+                },
+                "required": ["authorId", "postId", "content"],
+                "type": "object"
+            },
             "UserProfileResponse": {
                 "properties": {
                     "techStack": {
@@ -80,41 +199,7 @@
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
-                "type": "object",
-                "additionalProperties": false
-            },
-            "ApiError": {
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "stack": {
-                        "type": "string"
-                    },
-                    "statusCode": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "errors": {
-                        "items": {},
-                        "type": "array",
-                        "default": []
-                    }
-                },
-                "required": [
-                    "name",
-                    "message",
-                    "statusCode"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
@@ -137,33 +222,6 @@
                     }
                 },
                 "type": "object"
-            },
-            "ApiResponse____": {
-                "properties": {
-                    "statusCode": {
-                        "type": "number",
-                        "format": "double"
-                    },
-                    "status": {
-                        "type": "boolean"
-                    },
-                    "message": {
-                        "type": "string"
-                    },
-                    "data": {
-                        "properties": {},
-                        "type": "object",
-                        "nullable": true
-                    }
-                },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
-                "type": "object",
-                "additionalProperties": false
             },
             "UserSummaryResponse": {
                 "properties": {
@@ -232,12 +290,7 @@
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
@@ -250,10 +303,7 @@
                         "type": "string"
                     }
                 },
-                "required": [
-                    "isFollowing",
-                    "message"
-                ],
+                "required": ["isFollowing", "message"],
                 "type": "object"
             },
             "ApiResponse_FollowResponse_": {
@@ -277,12 +327,7 @@
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
@@ -295,13 +340,43 @@
                         "type": "string"
                     }
                 },
+                "required": ["followerId", "followingId"],
+                "type": "object"
+            },
+            "ForumResponse": {
+                "properties": {
+                    "createdById": {
+                        "type": "string"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string"
+                    }
+                },
                 "required": [
-                    "followerId",
-                    "followingId"
+                    "createdById",
+                    "updatedAt",
+                    "createdAt",
+                    "description",
+                    "title",
+                    "id"
                 ],
                 "type": "object"
             },
-            "ApiResponse_any_": {
+            "ApiResponse_ForumResponse_": {
                 "properties": {
                     "statusCode": {
                         "type": "number",
@@ -314,61 +389,60 @@
                         "type": "string"
                     },
                     "data": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ForumResponse"
+                            }
+                        ],
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             },
-            "EmojiType": {
-                "enum": [
-                    "like",
-                    "laugh",
-                    "cry",
-                    "angry"
-                ],
-                "type": "string"
-            },
-            "EmojiInput": {
+            "ForumInput": {
                 "properties": {
-                    "emoji": {
-                        "$ref": "#/components/schemas/EmojiType"
-                    }
-                },
-                "required": [
-                    "emoji"
-                ],
-                "type": "object"
-            },
-            "CommentInput": {
-                "properties": {
-                    "parentId": {
+                    "title": {
                         "type": "string"
                     },
-                    "authorId": {
-                        "type": "string"
-                    },
-                    "postId": {
-                        "type": "string"
-                    },
-                    "content": {
+                    "description": {
                         "type": "string"
                     }
                 },
-                "required": [
-                    "authorId",
-                    "postId",
-                    "content"
-                ],
+                "required": ["title", "description"],
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ForumUpdateInput": {
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "ForumSummaryResponse": {
+                "properties": {
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string"
+                    }
+                },
+                "required": ["createdAt", "title", "id"],
                 "type": "object"
             },
-            "ApiResponse_string_": {
+            "ApiResponse_ForumSummaryResponse-Array_": {
                 "properties": {
                     "statusCode": {
                         "type": "number",
@@ -381,16 +455,14 @@
                         "type": "string"
                     },
                     "data": {
-                        "type": "string",
+                        "items": {
+                            "$ref": "#/components/schemas/ForumSummaryResponse"
+                        },
+                        "type": "array",
                         "nullable": true
                     }
                 },
-                "required": [
-                    "statusCode",
-                    "status",
-                    "message",
-                    "data"
-                ],
+                "required": ["statusCode", "status", "message", "data"],
                 "type": "object",
                 "additionalProperties": false
             }
@@ -409,6 +481,567 @@
         }
     },
     "paths": {
+        "/join-waitlist/submit": {
+            "post": {
+                "operationId": "SubmitWaitListForm",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_string_"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Email already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Submit the join waitlist form",
+                "tags": ["JoinWaitList"],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "description": "- Contains name and email",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": ["email", "name"],
+                                "type": "object",
+                                "description": "- Contains name and email"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "operationId": "RegisterUser",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_any_"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "User already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Register a new user",
+                "tags": ["Auth"],
+                "security": [],
+                "parameters": [],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "files": {
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        },
+                                        "type": "array"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "operationId": "LoginUser",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_any_"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Login a user",
+                "tags": ["Auth"],
+                "security": [],
+                "parameters": []
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "operationId": "LogoutUser",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_any_"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Logout a user",
+                "tags": ["Auth"],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "parameters": []
+            }
+        },
+        "/post/create": {
+            "post": {
+                "operationId": "CreatePost",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_any_"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Create a new post",
+                "tags": ["Post"],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "categoryId": {
+                                        "type": "string"
+                                    },
+                                    "category": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "string"
+                                    },
+                                    "imageUrl": {
+                                        "type": "string"
+                                    },
+                                    "videoUrl": {
+                                        "type": "string"
+                                    },
+                                    "published": {
+                                        "type": "string"
+                                    },
+                                    "publishedAt": {
+                                        "type": "string"
+                                    },
+                                    "authorId": {
+                                        "type": "string"
+                                    },
+                                    "embedUrl": {
+                                        "type": "string"
+                                    },
+                                    "isPublished": {
+                                        "type": "string"
+                                    },
+                                    "files": {
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        },
+                                        "type": "array"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "title",
+                                    "content",
+                                    "categoryId",
+                                    "category",
+                                    "tags",
+                                    "imageUrl",
+                                    "videoUrl",
+                                    "published",
+                                    "publishedAt",
+                                    "authorId",
+                                    "embedUrl",
+                                    "isPublished"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/post": {
+            "get": {
+                "operationId": "GetPosts",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_any_"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Post"],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "skip",
+                        "required": false,
+                        "schema": {
+                            "default": 0,
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": false,
+                        "schema": {
+                            "default": 10,
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/post/{id}": {
+            "delete": {
+                "operationId": "DeletePost",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse____"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Post"],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            },
+            "patch": {
+                "operationId": "UpdatePost",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_any_"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Post"],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "content": {
+                                        "type": "string"
+                                    },
+                                    "categoryId": {
+                                        "type": "string"
+                                    },
+                                    "category": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "string"
+                                    },
+                                    "imageUrl": {
+                                        "type": "string"
+                                    },
+                                    "videoUrl": {
+                                        "type": "string"
+                                    },
+                                    "published": {
+                                        "type": "string"
+                                    },
+                                    "publishedAt": {
+                                        "type": "string"
+                                    },
+                                    "authorId": {
+                                        "type": "string"
+                                    },
+                                    "embedUrl": {
+                                        "type": "string"
+                                    },
+                                    "isPublished": {
+                                        "type": "string"
+                                    },
+                                    "files": {
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        },
+                                        "type": "array"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "title",
+                                    "content",
+                                    "categoryId",
+                                    "category",
+                                    "tags",
+                                    "imageUrl",
+                                    "videoUrl",
+                                    "published",
+                                    "publishedAt",
+                                    "authorId",
+                                    "embedUrl",
+                                    "isPublished"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/post/{id}/like": {
+            "post": {
+                "operationId": "ToggleLike",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_any_"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Post"],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmojiInput"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/post/{id}/comment": {
+            "post": {
+                "operationId": "CreateComment",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_any_"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": ["Post"],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommentInput"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/user/update": {
             "patch": {
                 "operationId": "UpdateUserProfile",
@@ -465,9 +1098,7 @@
                     }
                 },
                 "description": "Update user profile",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [
                     {
                         "jwt": []
@@ -512,9 +1143,7 @@
                     }
                 },
                 "description": "Get user by ID",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [],
                 "parameters": [
                     {
@@ -562,9 +1191,7 @@
                     }
                 },
                 "description": "Delete user",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [
                     {
                         "jwt": []
@@ -598,9 +1225,7 @@
                     }
                 },
                 "description": "Get users with pagination",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [],
                 "parameters": [
                     {
@@ -672,9 +1297,7 @@
                     }
                 },
                 "description": "Follow or unfollow a user",
-                "tags": [
-                    "User"
-                ],
+                "tags": ["User"],
                 "security": [
                     {
                         "jwt": []
@@ -693,340 +1316,16 @@
                 }
             }
         },
-        "/post/create": {
+        "/forums": {
             "post": {
-                "operationId": "CreatePost",
+                "operationId": "CreateForum",
                 "responses": {
                     "200": {
                         "description": "Ok",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse_any_"
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Create a new post",
-                "tags": [
-                    "Post"
-                ],
-                "security": [
-                    {
-                        "jwt": []
-                    }
-                ],
-                "parameters": [],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "title": {
-                                        "type": "string"
-                                    },
-                                    "content": {
-                                        "type": "string"
-                                    },
-                                    "tags": {
-                                        "type": "string"
-                                    },
-                                    "category": {
-                                        "type": "string"
-                                    },
-                                    "markdown": {
-                                        "type": "string"
-                                    },
-                                    "videoUrl": {
-                                        "type": "string"
-                                    },
-                                    "imageUrl": {
-                                        "type": "string"
-                                    },
-                                    "embedUrl": {
-                                        "type": "string"
-                                    },
-                                    "isPublished": {
-                                        "type": "string"
-                                    },
-                                    "publishedAt": {
-                                        "type": "string"
-                                    },
-                                    "files": {
-                                        "items": {
-                                            "type": "string",
-                                            "format": "binary"
-                                        },
-                                        "type": "array"
-                                    }
-                                },
-                                "required": [
-                                    "title",
-                                    "content"
-                                ]
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/post": {
-            "get": {
-                "operationId": "GetPosts",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse_any_"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Post"
-                ],
-                "security": [],
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "skip",
-                        "required": false,
-                        "schema": {
-                            "default": 0,
-                            "format": "double",
-                            "type": "number"
-                        }
-                    },
-                    {
-                        "in": "query",
-                        "name": "limit",
-                        "required": false,
-                        "schema": {
-                            "default": 10,
-                            "format": "double",
-                            "type": "number"
-                        }
-                    }
-                ]
-            }
-        },
-        "/post/{id}": {
-            "delete": {
-                "operationId": "DeletePost",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse____"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Post"
-                ],
-                "security": [
-                    {
-                        "jwt": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ]
-            },
-            "patch": {
-                "operationId": "UpdatePost",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse_any_"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Post"
-                ],
-                "security": [
-                    {
-                        "jwt": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": false,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "title": {
-                                        "type": "string"
-                                    },
-                                    "content": {
-                                        "type": "string"
-                                    },
-                                    "tags": {
-                                        "type": "string"
-                                    },
-                                    "category": {
-                                        "type": "string"
-                                    },
-                                    "markdown": {
-                                        "type": "string"
-                                    },
-                                    "videoUrl": {
-                                        "type": "string"
-                                    },
-                                    "imageUrl": {
-                                        "type": "string"
-                                    },
-                                    "embedUrl": {
-                                        "type": "string"
-                                    },
-                                    "files": {
-                                        "items": {
-                                            "type": "string",
-                                            "format": "binary"
-                                        },
-                                        "type": "array"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/post/{id}/like": {
-            "post": {
-                "operationId": "ToggleLike",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse_any_"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Post"
-                ],
-                "security": [
-                    {
-                        "jwt": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/EmojiInput"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/post/{id}/comment": {
-            "post": {
-                "operationId": "CreateComment",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse_any_"
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "Post"
-                ],
-                "security": [
-                    {
-                        "jwt": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/CommentInput"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/join-waitlist/submit": {
-            "post": {
-                "operationId": "SubmitWaitListForm",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse_string_"
+                                    "$ref": "#/components/schemas/ApiResponse_ForumResponse_"
                                 }
                             }
                         }
@@ -1037,178 +1336,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "Email already exists",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Submit the join waitlist form",
-                "tags": [
-                    "JoinWaitList"
-                ],
-                "security": [],
-                "parameters": [],
-                "requestBody": {
-                    "description": "- Contains name and email",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "email": {
-                                        "type": "string"
-                                    },
-                                    "name": {
-                                        "type": "string"
-                                    }
-                                },
-                                "required": [
-                                    "email",
-                                    "name"
-                                ],
-                                "type": "object",
-                                "description": "- Contains name and email"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/register": {
-            "post": {
-                "operationId": "RegisterUser",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse_any_"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Validation failed",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "User already exists",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Register a new user",
-                "tags": [
-                    "Auth"
-                ],
-                "security": [],
-                "parameters": [],
-                "requestBody": {
-                    "required": false,
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "files": {
-                                        "items": {
-                                            "type": "string",
-                                            "format": "binary"
-                                        },
-                                        "type": "array"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/auth/login": {
-            "post": {
-                "operationId": "LoginUser",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse_any_"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Validation failed",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Invalid credentials",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiError"
-                                }
-                            }
-                        }
-                    }
-                },
-                "description": "Login a user",
-                "tags": [
-                    "Auth"
-                ],
-                "security": [],
-                "parameters": []
-            }
-        },
-        "/auth/logout": {
-            "post": {
-                "operationId": "LogoutUser",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ApiResponse_any_"
                                 }
                             }
                         }
@@ -1224,16 +1351,218 @@
                         }
                     }
                 },
-                "description": "Logout a user",
-                "tags": [
-                    "Auth"
-                ],
+                "description": "Create forum",
+                "tags": ["Forum"],
                 "security": [
                     {
                         "jwt": []
                     }
                 ],
-                "parameters": []
+                "parameters": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ForumInput"
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "operationId": "GetForums",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_ForumSummaryResponse-Array_"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get forums with pagination",
+                "tags": ["Forum"],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "required": false,
+                        "schema": {
+                            "default": 10,
+                            "format": "double",
+                            "type": "number"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "skip",
+                        "required": false,
+                        "schema": {
+                            "default": 0,
+                            "format": "double",
+                            "type": "number"
+                        }
+                    }
+                ]
+            }
+        },
+        "/forums/{forumId}": {
+            "patch": {
+                "operationId": "UpdateForum",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_ForumResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Forum not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Update forum",
+                "tags": ["Forum"],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "forumId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ForumUpdateInput"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "DeleteForum",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse____"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Forum not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Delete forum",
+                "tags": ["Forum"],
+                "security": [
+                    {
+                        "jwt": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "forumId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            },
+            "get": {
+                "operationId": "GetForumById",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiResponse_ForumResponse_"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Forum not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApiError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Get forum by ID",
+                "tags": ["Forum"],
+                "security": [],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "forumId",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ]
             }
         }
     },

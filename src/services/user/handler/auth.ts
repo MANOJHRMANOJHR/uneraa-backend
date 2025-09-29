@@ -2,14 +2,11 @@ import prisma from '../../../lib/prisma.js';
 import bcrypt from 'bcrypt';
 import { uploadOnCloudinary } from '../../../utils/cloudinary.js';
 import { generateToken } from '../../../utils/jwt-token.js';
-import {
-  userLoginSchema,
-  userRegisterSchema,
-} from '../../../controllers/constrollersSchema.js';
+import { userLoginSchema, userRegisterSchema } from '../schema.js';
 import ApiError from '../../../utils/api-error.js';
 import { StatusCode } from '../../../constants/statusCode.js';
 import { getUniqueUserName } from '../../../utils/uniqueUserName.js';
-import { AuthenticatedRequest } from '../../../controllers/types/user.type.js';
+import { AuthenticatedRequest } from '../types.js';
 
 export const RegisterUser = async (body: any, files?: any) => {
   const { success, data, error } = userRegisterSchema.safeParse(body);

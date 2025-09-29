@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+# . "$(dirname "$0")/h"  
+
+# Exit immediately if any command fails
+set -e
+
+echo "Running TypeScript typecheck..."
+npm run typecheck
+
+echo "Running Prettier format check..."
+npm run format
+
+echo "Running ESLint..."
+npm run lint
+
+echo "Running Build..."
+npm run build
+
+echo "All checks passed ✅"
