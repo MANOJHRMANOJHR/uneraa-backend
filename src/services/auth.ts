@@ -1,19 +1,19 @@
+import { Request as ExpressRequest } from 'express';
 import {
   Controller,
   Post,
-  Route,
-  Tags,
   Request,
-  Security,
   Response,
+  Route,
+  Security,
+  Tags,
   UploadedFiles,
 } from 'tsoa';
-import { Request as ExpressRequest } from 'express';
+import { StatusCode } from '../constants/statusCode.js';
 import ApiError from '../utils/api-error.js';
 import ApiResponse from '../utils/api-response.js';
-import { StatusCode } from '../constants/statusCode.js';
-import { AuthenticatedRequest } from './user/types.js';
 import { LoginUser, LogoutUser, RegisterUser } from './user/handler/auth.js';
+import { AuthenticatedRequest } from './user/types.js';
 
 @Route('auth')
 @Tags('Auth')
@@ -36,6 +36,7 @@ export class AuthController extends Controller {
   ): Promise<ApiResponse<any>> {
     const createdUser = await RegisterUser(req.body, files);
 
+    
     return new ApiResponse(
       StatusCode.OK,
       true,
